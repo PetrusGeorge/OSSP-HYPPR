@@ -134,6 +134,37 @@ void Parameters::getFiles() {
     }
 }
 
+double calculateAlpha(unsigned numTools) {
+    // Calculate alpha parameter
+    double alpha;
+    switch (numTools){
+        case 3:
+        case 4:
+        case 15:
+            alpha = 0.89;
+            break;
+        case 5:
+            alpha = 0.59;
+            break;
+        case 6:
+            alpha = 0.11;
+            break;
+        case 7:
+        case 8:
+        case 20:
+            alpha = 0.22;
+            break;
+        case 9:
+        case 10:
+            alpha = 0.67;
+            break;
+        default:
+            alpha = 0.1;
+    }
+
+    return alpha;
+}
+
 void Parameters::readFile(const string &file) {
     // Read instance file
 
@@ -145,6 +176,8 @@ void Parameters::readFile(const string &file) {
         numJobs = (unsigned int)stoi(sLine);
         getline(inFile, sLine);
         numTools = (unsigned int)stoi(sLine);
+
+        alpha = calculateAlpha(numTools);
         
         unsigned int j = 0;
         vector<vector<unsigned int> > lines(numJobs, vector<unsigned int>(numTools, 0));

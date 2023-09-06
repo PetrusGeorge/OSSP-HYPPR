@@ -120,6 +120,9 @@ public:
     pair<double, int> viz2;
     pair<double, int> viz3;
 
+    // alpha for BICH_MIH
+    double alpha;
+
     /// Destructor
     ~Parameters();
 };
