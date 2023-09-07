@@ -16,11 +16,11 @@
 #include "Util.h"
 #include <chrono>
 
+#include "Construction.h"
+
 #define min(a, b) ((a < b) ? a : b)
 
 using namespace std;
-
-#include "Construction.h"
 
 int main(int argc, char* argv[]) {
 
@@ -84,12 +84,15 @@ int main(int argc, char* argv[]) {
 
                 // getchar();
 
-                vector<unsigned> U = {9,3,5,6,4,8,7,2,1};
+                vector<int> teste;
 
-                parameters->numJobs = 3;
-                parameters->numTools = 3;
+                teste = BICH_MIH(parameters);
 
-                std::cout << calculateMakespan(U, parameters) << endl;
+                for(auto a : teste){
+                    cout << a << " ";
+                }cout << endl;
+                cout << teste.size() << endl;
+
 
                 // Run genetic algorithm
                 /* Genetic solver(parameters, population, nb_ticks_allowed, false);

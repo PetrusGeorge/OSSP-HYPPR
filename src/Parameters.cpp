@@ -136,33 +136,33 @@ void Parameters::getFiles() {
 
 double calculateAlpha(unsigned numTools) {
     // Calculate alpha parameter
-    double alpha;
+    double a;
     switch (numTools){
         case 3:
         case 4:
         case 15:
-            alpha = 0.89;
+            a = 0.89;
             break;
         case 5:
-            alpha = 0.59;
+            a = 0.59;
             break;
         case 6:
-            alpha = 0.11;
+            a = 0.11;
             break;
         case 7:
         case 8:
         case 20:
-            alpha = 0.22;
+            a = 0.22;
             break;
         case 9:
         case 10:
-            alpha = 0.67;
+            a = 0.67;
             break;
         default:
-            alpha = 0.1;
+            a = 0.1;
     }
 
-    return alpha;
+    return a;
 }
 
 void Parameters::readFile(const string &file) {
