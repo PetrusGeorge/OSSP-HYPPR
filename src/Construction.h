@@ -1,12 +1,12 @@
 #ifndef CONSTRUCTION_H
 #define CONSTRUCTION_H
 
+#define EPSILON 0.0000001
+
 using namespace std;
 
 #include "Parameters.h"
 
-inline unsigned calculateMakespan(vector<unsigned> U, Parameters *parameters);
-inline unsigned calculateMakespan(vector<unsigned> U, Parameters *parameters, vector<int>& M, vector<int>& J);
 vector<int> BICH_MIH(Parameters *parameters);
 
 #endif

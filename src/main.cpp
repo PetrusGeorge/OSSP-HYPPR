@@ -89,10 +89,8 @@ int main(int argc, char* argv[]) {
                 teste = BICH_MIH(parameters);
 
                 for(auto a : teste){
-                    //cout << a << " ";
+                    cout << a << " ";
                 }cout << endl;
-                //cout << teste.size() << endl;
-
 
                 // Run genetic algorithm
                 /* Genetic solver(parameters, population, nb_ticks_allowed, false);
