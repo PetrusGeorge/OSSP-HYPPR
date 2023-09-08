@@ -1,12 +1,18 @@
 #include "Construction.h"
 #include <math.h>
-#include <queue>
+
+inline pair<unsigned, unsigned> decryptJobMachineNumber(unsigned op, unsigned numJobs){
+    unsigned machineNumber = ceil(op * 1.0/ numJobs * 1.0);
+    unsigned jobNumber = op  - (machineNumber-1) * numJobs;
+
+    return make_pair(jobNumber, machineNumber);
+}
 
 int calculateMakespan(vector<int> U, Parameters *parameters) {
 
-    vector<int> M(parameters->numTools, 0);
-    vector<int> J(parameters->numJobs, 0);
-
+    vector<int> M(parameters->numTools, 0);//Machines acumulated time
+    vector<int> J(parameters->numJobs, 0);//Jobs acumulated time
+    //U is the sequence of operations
     while(!U.empty()){
      
         int op = U[0];
@@ -98,7 +104,7 @@ vector<int> BICH_MIH(Parameters *parameters){
     unsigned operationsNum = parameters->numJobs * parameters->numTools;
 
     while(currentSequence.size() < operationsNum){
-        priority_queue <pair<double, int>> ops;
+        vector<pair<double, int>> ops;
 
         for(int i = 0; i < parameters->numJobs; i++){
             for(int j = 0; j < parameters->numTools; j++){
@@ -108,16 +114,20 @@ vector<int> BICH_MIH(Parameters *parameters){
 
                     bich_mih += (parameters->alpha * (J[i] - M[j] > 0 ? J[i] - M[j] : 0));
 
-                    ops.push(make_pair(bich_mih, op));
+                    ops.push_back(make_pair(bich_mih, op));
                 }
             }
         }
 
-        unsigned bestOp = ops.top().second;
-        currentSequence.push_back(bestOp);
+        sort(ops.begin(), ops.end());
 
-        unsigned machineNumber = ceil(bestOp * 1.0/ parameters->numJobs * 1.0);
-        unsigned jobNumber = bestOp  - (machineNumber-1) * parameters->numJobs;
+        double beta = ((double) rand() / RAND_MAX) + 0.00001;//0.00001 to avoid 0
+        int choseIndex = rand() % ((int) ceil(beta * ops.size()));//random function that has more chance to be a lower number
+        int choseOp = ops[choseIndex].second;
+        currentSequence.push_back(choseOp);
+
+        unsigned machineNumber = ceil(choseOp * 1.0/ parameters->numJobs * 1.0);
+        unsigned jobNumber = choseOp  - (machineNumber-1) * parameters->numJobs;
         
         P[jobNumber-1][machineNumber-1] = 0;
     }
