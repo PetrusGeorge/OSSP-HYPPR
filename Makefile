@@ -9,7 +9,6 @@ CPPC = g++
 CCOPT = $(BITS_OPTION) -O3 -fPIC -fexceptions -DNDEBUG -DIL_STD -std=c++0x -msse2   
 CONCERTINCDIR = $(CONCERTDIR)/include
 #############################
-
 #### flags do linker
 #############################
 
@@ -21,10 +20,12 @@ OBJDIR = obj
 #### lista de todos os srcs e todos os objs
 SRCS = $(wildcard $(SRCDIR)/*.cpp)
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
+
 #############################
 
 #### regra principal, gera o executavel
 HyPRR: $(OBJS) 
+	@echo "sla"
 	@echo  "\033[31m \nLinking all objects files: \033[0m"
 	$(CPPC) $(BITS_OPTION) $(OBJS) -o $@ $(CPPFLAGS) $(CCOPT) -g 
 ############################

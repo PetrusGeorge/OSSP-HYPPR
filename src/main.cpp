@@ -84,14 +84,39 @@ int main(int argc, char* argv[]) {
 
                 // getchar();
 
+                /*
                 vector<int> teste;
+                vector<int> endTimeOperations;
 
-                teste = BICH_MIH(parameters);
+                teste = BICH_MIH(parameters, endTimeOperations);
+                */
+
+               vector<int> teste = {9,3,5,6,4,8,7,2,1};
+               vector<int> endTimeOperations(9, 0);
+               calculateMakespan(parameters, endTimeOperations, teste);
 
                 for(auto a : teste){
                     cout << a << " ";
                 }cout << endl;
 
+                for(int i =0; i < endTimeOperations.size(); i++){
+                    cout << endTimeOperations[i] << " ";
+                }
+
+                vector<int> M, J;
+                cout << endl;
+
+                cout << updateMakespan(parameters, endTimeOperations, 3, teste, M, J) << endl;
+
+                // show M e J vectors
+
+                for(auto a : M){
+                    cout << a << " ";
+                }cout << endl;
+
+                for(auto a : J){
+                    cout << a << " ";
+                }cout << endl;
                 // Run genetic algorithm
                 /* Genetic solver(parameters, population, nb_ticks_allowed, false);
                 solver.evolve(min(1001, 1000));
