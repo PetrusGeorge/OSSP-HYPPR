@@ -90,33 +90,40 @@ int main(int argc, char* argv[]) {
 
                 teste = BICH_MIH(parameters, endTimeOperations);
                 */
+               
+                vector<int> endTimeOperations;
+                vector<int> teste = BICH_MIH(parameters, endTimeOperations);
 
-               vector<int> teste = {9,3,5,6,4,8,7,2,1};
-               vector<int> endTimeOperations(9, 0);
-               calculateMakespan(parameters, endTimeOperations, teste);
+                vector<int> M, J;
+
+                for(int i = 0; i < 9; i++){
+                    for(int i = 0; i < endTimeOperations.size()-1; i++){
+                        int aux = teste[i];
+                        teste[i] = teste[i+1];
+                        teste[i+1] = aux;
+
+                        // if(i == 0){
+                            cout << calculateMakespan(parameters, endTimeOperations, teste) << endl;
+                        //     continue;
+                        // }
+                            
+                        // calculateJMbyIndex(parameters, endTimeOperations, i-1, teste, M, J);
+                        // updateMakespan(parameters, M, J, i-1, teste, endTimeOperations);
+                    }
+                }
+
+                totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
+                double finalTime = cpuTime() - parameters->cpuTime;
+
+                cout << finalTime << endl;
 
                 for(auto a : teste){
                     cout << a << " ";
                 }cout << endl;
+               
 
-                for(int i =0; i < endTimeOperations.size(); i++){
-                    cout << endTimeOperations[i] << " ";
-                }
+               
 
-                vector<int> M, J;
-                cout << endl;
-
-                cout << updateMakespan(parameters, endTimeOperations, 3, teste, M, J) << endl;
-
-                // show M e J vectors
-
-                for(auto a : M){
-                    cout << a << " ";
-                }cout << endl;
-
-                for(auto a : J){
-                    cout << a << " ";
-                }cout << endl;
                 // Run genetic algorithm
                 /* Genetic solver(parameters, population, nb_ticks_allowed, false);
                 solver.evolve(min(1001, 1000));

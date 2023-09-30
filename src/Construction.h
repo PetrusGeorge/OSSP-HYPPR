@@ -8,6 +8,7 @@ using namespace std;
 #include "Parameters.h"
 
 vector<int> BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations);
-int updateMakespan(Parameters *parameters, const vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J);
+int calculateJMbyIndex(Parameters *parameters, const vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J);
 int calculateMakespan(Parameters *parameters, vector<int>& endTimeOperations, vector<int> U);
+void updateMakespan(Parameters *parameters, vector<int>& M, vector<int>& J, int index, vector<int> U, vector<int>& endTimeOperations);
 #endif

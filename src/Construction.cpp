@@ -9,8 +9,6 @@ inline pair<unsigned, unsigned> decryptJobMachineIndex(unsigned op, unsigned num
 }
 
 int calculateMakespan(Parameters *parameters, vector<int>& endTimeOperations, vector <int> U) {
-    parameters->numJobs = 3;
-    parameters->numTools = 3;
     vector<int> M(parameters->numTools, 0);//Machines acumulated time
     vector<int> J(parameters->numJobs, 0);//Jobs acumulated time
     //U is the sequence of operations
@@ -71,6 +69,38 @@ inline void updateMJ(Parameters *parameters, vector<int>& M, vector<int>& J, uns
     endTimeOperations[op-1] = M[indexJM.second];
 }
 
+void updateMakespan(Parameters *parameters, vector<int>& M, vector<int>& J, int index, vector<int> U, vector<int>& endTimeOperations){
+    for(int i = index+1; i < U.size(); i++){
+        unsigned op = U[i];
+        updateMJ(parameters, M, J, op, endTimeOperations);
+    }
+}
+
+int calculateJMbyIndex(Parameters *parameters, const vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J){
+    M = vector<int>(parameters->numTools, 0);
+    J = vector<int>(parameters->numJobs, 0);
+    int j = 0, m = 0;
+    for(int i = index; i >= 0; i--){
+        unsigned op = U[i];
+        pair<unsigned, unsigned> indexJM = decryptJobMachineIndex(op, parameters->numJobs);
+
+        if(j == parameters->numJobs && m == parameters->numTools){
+            break;
+        }
+
+        if(J[indexJM.first] == 0){
+            J[indexJM.first] = endTimeOperations[op-1];
+            j++;
+        }
+        if(M[indexJM.second] == 0){
+            M[indexJM.second] = endTimeOperations[op-1];
+            m++;
+        }
+    }
+
+    return *max_element(M.begin(), M.end());
+}
+
 inline int calculateMakespanOp(Parameters *parameters, vector<int> M, const vector<int> J, unsigned op){
     pair<unsigned, unsigned> indexJM = decryptJobMachineIndex(op, parameters->numJobs);
 
@@ -79,25 +109,6 @@ inline int calculateMakespanOp(Parameters *parameters, vector<int> M, const vect
     M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
 
     return *max_element(M.begin(), M.end()) ;
-}
-
-int updateMakespan(Parameters *parameters, const vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J){
-    M = vector<int>(parameters->numTools, 0);
-    J = vector<int>(parameters->numJobs, 0);
-    for(int i = index; i >= 0; i--){
-        unsigned op = U[i];
-        cout << "op: " << op << endl;
-        pair<unsigned, unsigned> indexJM = decryptJobMachineIndex(op, parameters->numJobs);
-
-        if(J[indexJM.first] == 0){
-            J[indexJM.first] = endTimeOperations[op-1];
-        }
-        if( M[indexJM.second] == 0){
-            M[indexJM.second] = endTimeOperations[op-1];
-        }
-    }
-
-    return *max_element(M.begin(), M.end());
 }
 
 double EMC(Parameters *parameters,const vector<vector<unsigned>>& P, unsigned op){
@@ -138,8 +149,6 @@ double EMC(Parameters *parameters,const vector<vector<unsigned>>& P, unsigned op
 }
 
 vector<int> BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations){
-    parameters->numJobs = 3;
-    parameters->numTools = 3;
     vector<int> M(parameters->numTools, 0);
     vector<int> J(parameters->numJobs, 0);
     endTimeOperations = vector<int>(parameters->numJobs * parameters->numTools, 0);
@@ -176,8 +185,6 @@ vector<int> BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations){
         
         P[indexJM.first][indexJM.second] = 0;
     }
-
-  cout << "Makespan: " << *max_element(M.begin(), M.end()) << endl;
 
     return currentSequence;
 }
