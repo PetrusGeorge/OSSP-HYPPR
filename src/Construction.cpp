@@ -1,14 +1,14 @@
 #include "Construction.h"
 #include <math.h>
 
-inline pair<unsigned, unsigned> decryptJobMachineIndex(unsigned op, unsigned numJobs){
+pair<unsigned, unsigned> decryptJobMachineIndex(unsigned op, unsigned numJobs){
     unsigned machineNumber = ceil(op * 1.0/ numJobs * 1.0);
     unsigned jobNumber = op  - (machineNumber-1) * numJobs;
 
     return make_pair(jobNumber-1, machineNumber-1);
 }
 
-int calculateMakespan(Parameters *parameters, vector<int>& endTimeOperations, vector <int> U) {
+int calculateMakespan(Parameters *parameters, vector <int> U) {
     vector<int> M(parameters->numTools, 0);//Machines acumulated time
     vector<int> J(parameters->numJobs, 0);//Jobs acumulated time
     //U is the sequence of operations
@@ -24,8 +24,6 @@ int calculateMakespan(Parameters *parameters, vector<int>& endTimeOperations, ve
 
         J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
         M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
-
-        endTimeOperations[op-1] = M[indexJM.second];
 
         //cout << "J[" << jobNumber-1 << "]: " << J[jobNumber-1] << " M[" << machineNumber-1 << "]: " << M[machineNumber-1] << endl << endl;        
     }
@@ -149,6 +147,8 @@ double EMC(Parameters *parameters,const vector<vector<unsigned>>& P, unsigned op
 }
 
 vector<int> BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations){
+    // parameters->numJobs = 3;
+    // parameters->numTools = 3;
     vector<int> M(parameters->numTools, 0);
     vector<int> J(parameters->numJobs, 0);
     endTimeOperations = vector<int>(parameters->numJobs * parameters->numTools, 0);

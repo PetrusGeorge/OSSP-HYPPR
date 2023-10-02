@@ -17,6 +17,7 @@
 #include <chrono>
 
 #include "Construction.h"
+#include "BuscaLocal.h"
 
 #define min(a, b) ((a < b) ? a : b)
 
@@ -43,6 +44,7 @@ int main(int argc, char* argv[]) {
                             commandLine.getSolutionPath(), commandLine.getPopulationSize(), commandLine.getMaxPopulationSize(),
                             commandLine.getNumberElite(), commandLine.getNumberCloseIndividuals(), commandLine.getMaxDiversify());
 //        runs = commandLine.getRuns();
+
 
         //cout << "Starting " << commandLine.getInstancesPaths() << "/" << commandLine.getInstancesNames() <<  endl;
         //cout << endl;
@@ -72,7 +74,7 @@ int main(int argc, char* argv[]) {
                                 
                 parameters->cpuTime = cpuTime();
                 // Start population
-                population = new Population(parameters);
+                // population = new Population(parameters);
                 // cout << population->getBestIndividual()->solutionCost.evaluation << endl;
                 // cout << cpuTime() - parameters->cpuTime << endl << endl;
 
@@ -83,44 +85,58 @@ int main(int argc, char* argv[]) {
                 // cout << endl << endl;
 
                 // getchar();
-
-                /*
-                vector<int> teste;
-                vector<int> endTimeOperations;
-
-                teste = BICH_MIH(parameters, endTimeOperations);
-                */
                
                 vector<int> endTimeOperations;
                 vector<int> teste = BICH_MIH(parameters, endTimeOperations);
+                int mk = calculateMakespan(parameters, teste);
 
-                vector<int> M, J;
+                BuscaLocal *LS = new BuscaLocal(); 
 
-                for(int i = 0; i < 9; i++){
-                    for(int i = 0; i < endTimeOperations.size()-1; i++){
-                        int aux = teste[i];
-                        teste[i] = teste[i+1];
-                        teste[i+1] = aux;
+                for(auto a : teste){
+                    cout << a << " ";
+                }cout << endl;
 
-                        // if(i == 0){
-                            cout << calculateMakespan(parameters, endTimeOperations, teste) << endl;
-                        //     continue;
-                        // }
+                cout << mk << endl;
+
+                cout << LS->swap(parameters, teste, mk) << endl;
+                cout << LS->relocate(parameters, teste, mk) << endl;
+                cout << LS->relocate2(parameters, teste, mk) << endl;
+
+                // vector<int> M, J;
+                // int a =0;
+
+                // for(int i = 0; i < 9; i++){
+                //     for(int i = 0; i < endTimeOperations.size()-1; i++){
+                //         if(LS->redundancySwapAdjacent(parameters, teste[i], teste[i+1])){
+                //             a++;
+                //             continue;
+                //         }
                             
-                        // calculateJMbyIndex(parameters, endTimeOperations, i-1, teste, M, J);
-                        // updateMakespan(parameters, M, J, i-1, teste, endTimeOperations);
-                    }
-                }
+
+                //         int aux = teste[i];
+                //         teste[i] = teste[i+1];
+                //         teste[i+1] = aux;
+
+                       
+                //         cout << calculateMakespan(parameters, teste) << endl;
+                //     }
+                // }
+
+                // cout << "Redundantes: " << a << endl;
+
+                cout << calculateMakespan(parameters, teste) << endl;
+
+                for(auto a : teste){
+                    cout << a << " ";
+                }cout << endl;
+               
 
                 totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
                 double finalTime = cpuTime() - parameters->cpuTime;
 
                 cout << finalTime << endl;
 
-                for(auto a : teste){
-                    cout << a << " ";
-                }cout << endl;
-               
+     
 
                
 
