@@ -146,9 +146,10 @@ double EMC(Parameters *parameters,const vector<vector<unsigned>>& P, unsigned op
     return max(lbJobs, lbMachines);
 }
 
-vector<int> BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations){
+unsigned int BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations, vector<int>& chromose){
     // parameters->numJobs = 3;
     // parameters->numTools = 3;
+    // parameters->positionsOffspring.resize(3);
     vector<int> M(parameters->numTools, 0);
     vector<int> J(parameters->numJobs, 0);
     endTimeOperations = vector<int>(parameters->numJobs * parameters->numTools, 0);
@@ -186,5 +187,6 @@ vector<int> BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations){
         P[indexJM.first][indexJM.second] = 0;
     }
 
-    return currentSequence;
+    chromose = currentSequence;
+    return *max_element(M.begin(), M.end());
 }

@@ -18,6 +18,7 @@
 
 #include "Construction.h"
 #include "BuscaLocal.h"
+#include "Genetico.h"
 
 #define min(a, b) ((a < b) ? a : b)
 
@@ -87,26 +88,27 @@ int main(int argc, char* argv[]) {
                 // getchar();
                
                 vector<int> endTimeOperations;
-                vector<int> teste = BICH_MIH(parameters, endTimeOperations);
+                vector<int> parent1, parent2;
+                cout << BICH_MIH(parameters, endTimeOperations, parent1) << endl;
+                cout << BICH_MIH(parameters, endTimeOperations, parent2) << endl;
 
-                int mk = calculateMakespan(parameters, teste);
+                vector<int> child;
 
-                BuscaLocal *LS = new BuscaLocal(parameters, teste, endTimeOperations, mk); 
+                Genetico *GE = new Genetico(parameters);
 
-                for(auto a : teste){
-                    cout << a << " ";
-                }cout << endl;
+                for(int i = 0; i < parent1.size(); i++){
+                    cout << parent1[i] << " ";
+                } cout << endl;
 
-                cout << mk << endl;
+                for(int i = 0; i < parent2.size(); i++){
+                    cout << parent2[i] << " ";
+                } cout << endl;
 
-                LS->runSearchTotal();
+                cout << GE->crossoverOX(parent1, parent2, child) << endl;
 
-                cout << LS->makespan << endl;
-
-                for(auto a : LS->U){
-                    cout << a << " ";
-                }cout << endl;
-               
+                for(int i = 0; i < child.size(); i++){
+                    cout << child[i] << " ";
+                } cout << endl;
 
                 totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
                 double finalTime = cpuTime() - parameters->cpuTime;
