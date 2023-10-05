@@ -142,6 +142,7 @@ bool BuscaLocal::relocate(){
 }
 
 bool BuscaLocal::relocateBlock(int blockSize){
+    
     vector<int> sequence;
     vector<int> bestSequence = U;
     int bestMakespan = makespan;
