@@ -88,9 +88,10 @@ int main(int argc, char* argv[]) {
                
                 vector<int> endTimeOperations;
                 vector<int> teste = BICH_MIH(parameters, endTimeOperations);
+
                 int mk = calculateMakespan(parameters, teste);
 
-                BuscaLocal *LS = new BuscaLocal(); 
+                BuscaLocal *LS = new BuscaLocal(parameters, teste, endTimeOperations, mk); 
 
                 for(auto a : teste){
                     cout << a << " ";
@@ -98,35 +99,11 @@ int main(int argc, char* argv[]) {
 
                 cout << mk << endl;
 
-                cout << LS->swap(parameters, teste, mk) << endl;
-                cout << LS->relocate(parameters, teste, mk) << endl;
-                cout << LS->relocate2(parameters, teste, mk) << endl;
+                LS->runSearchTotal();
 
-                // vector<int> M, J;
-                // int a =0;
+                cout << LS->makespan << endl;
 
-                // for(int i = 0; i < 9; i++){
-                //     for(int i = 0; i < endTimeOperations.size()-1; i++){
-                //         if(LS->redundancySwapAdjacent(parameters, teste[i], teste[i+1])){
-                //             a++;
-                //             continue;
-                //         }
-                            
-
-                //         int aux = teste[i];
-                //         teste[i] = teste[i+1];
-                //         teste[i+1] = aux;
-
-                       
-                //         cout << calculateMakespan(parameters, teste) << endl;
-                //     }
-                // }
-
-                // cout << "Redundantes: " << a << endl;
-
-                cout << calculateMakespan(parameters, teste) << endl;
-
-                for(auto a : teste){
+                for(auto a : LS->U){
                     cout << a << " ";
                 }cout << endl;
                
@@ -136,9 +113,6 @@ int main(int argc, char* argv[]) {
 
                 cout << finalTime << endl;
 
-     
-
-               
 
                 // Run genetic algorithm
                 /* Genetic solver(parameters, population, nb_ticks_allowed, false);

@@ -67,14 +67,16 @@ inline void updateMJ(Parameters *parameters, vector<int>& M, vector<int>& J, uns
     endTimeOperations[op-1] = M[indexJM.second];
 }
 
-void updateMakespan(Parameters *parameters, vector<int>& M, vector<int>& J, int index, vector<int> U, vector<int>& endTimeOperations){
+int updateMakespan(Parameters *parameters, vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J){
     for(int i = index+1; i < U.size(); i++){
         unsigned op = U[i];
         updateMJ(parameters, M, J, op, endTimeOperations);
     }
+
+    return *max_element(M.begin(), M.end());
 }
 
-int calculateJMbyIndex(Parameters *parameters, const vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J){
+void calculateJMbyIndex(Parameters *parameters, const vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J){
     M = vector<int>(parameters->numTools, 0);
     J = vector<int>(parameters->numJobs, 0);
     int j = 0, m = 0;
@@ -95,8 +97,6 @@ int calculateJMbyIndex(Parameters *parameters, const vector<int>& endTimeOperati
             m++;
         }
     }
-
-    return *max_element(M.begin(), M.end());
 }
 
 inline int calculateMakespanOp(Parameters *parameters, vector<int> M, const vector<int> J, unsigned op){
