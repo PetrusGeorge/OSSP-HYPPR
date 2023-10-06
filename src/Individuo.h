@@ -9,6 +9,13 @@
 
 using namespace std;
 
+typedef struct{
+
+    Individuo *individual;
+
+    double distance;
+}Proximity;
+
 class Individuo{
     private:
         Parameters *parameters;
@@ -19,6 +26,11 @@ class Individuo{
         float fitRank;
         unsigned int calcMakespan();
         Individuo(Parameters *parameters);
+
+
+    list<Proximity> closest;
+
+    int calculateDistance(Individuo *individuo);
 };
 
 #endif
