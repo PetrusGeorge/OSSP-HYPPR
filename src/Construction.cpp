@@ -178,7 +178,7 @@ unsigned int BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations, ve
 
         double beta = ((double) rand() / RAND_MAX) + 0.00001;//0.00001 to avoid 0
         int choseIndex = rand() % ((int) ceil(beta * ops.size()));//random function that has more chance to be a lower number
-        int choseOp = ops[0].second;
+        int choseOp = ops[choseIndex].second;
         currentSequence.push_back(choseOp);
         updateMJ(parameters, M, J, choseOp, endTimeOperations);
 

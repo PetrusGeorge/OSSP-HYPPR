@@ -5,6 +5,9 @@ Individuo::Individuo(Parameters *parameters){
     this->makespan = BICH_MIH(parameters, endTimeOperations, chromosome);
 }
 
+Individuo::Individuo(){
+}
+
 unsigned int Individuo::calcMakespan(){
     vector<int> M(parameters->numTools, 0);//Machines acumulated time
     vector<int> J(parameters->numJobs, 0);//Jobs acumulated time
@@ -45,46 +48,54 @@ unsigned int Individuo::calcMakespan(){
 //     return dist;
 // }
 
-// void Individual::addClose(Individual *indiv) {
-//     // Add an individual in the structure of proximity
-//     list<ProxData>::iterator it;
-//     ProxData data;
-//     data.individual = indiv;
-//     data.dist = distance(indiv);
+void Individuo::recopyIndividual(Individuo *indiv){
+    this->makespan = indiv->makespan;
+    this->chromosome = indiv->chromosome;
+    this->fitRank = indiv->fitRank;
+    this->closest = indiv->closest;
+}
 
-//     if (closest.empty())
-//         closest.push_back(data);
-//     else {
-//         it = closest.begin();
-//         while (it != closest.end() && it->dist < data.dist)
-//             ++it;
-//         closest.insert(it, data);
-//     }
-// }
 
-// void Individual::removeClose(Individual *indiv) {
-//     // Remove an individual in the structure of proximity
-//     list<ProxData>::iterator last = closest.end();
-//     for (list<ProxData>::iterator first = closest.begin(); first != last;)
-//         if (first->individual == indiv)
-//             first = closest.erase(first);
-//         else
-//             ++first;
-// }
+void Individuo::addClose(Individuo *indiv) {
+    // Add an individual in the structure of proximity
+    list<Proximity>::iterator it;
+    Proximity data;
+    data.individual = indiv;
+    data.distance = calculateDistance(indiv);
 
-// double Individuo::distToClosests(int n) {
-//     // Compute the average distance with the n close elements
-//     double result = 0;
-//     double compte = 0;
-//     list<ProxData>::iterator it = closest.begin();
+    if (closest.empty())
+        closest.push_back(data);
+    else {
+        it = closest.begin();
+        while (it != closest.end() && it->distance < data.distance)
+            ++it;
+        closest.insert(it, data);
+    }
+}
 
-//     for (int i = 0; i < n && it != closest.end(); i++) {
-//         result += it->dist;
-//         compte += 1.0;
-//         ++it;
-//     }
-//     return result / compte;
-// }
+void Individuo::removeClose(Individuo *indiv) {
+    // Remove an individual in the structure of proximity
+    list<Proximity>::iterator last = closest.end();
+    for (list<Proximity>::iterator first = closest.begin(); first != last;)
+        if (first->individual == indiv)
+            first = closest.erase(first);
+        else
+            ++first;
+}
+
+double Individuo::distToClosests(int n) {
+    // Compute the average distance with the n close elements
+    double result = 0;
+    double compte = 0;
+    list<Proximity>::iterator it = closest.begin();
+
+    for (int i = 0; i < n && it != closest.end(); i++) {
+        result += it->distance;
+        compte += 1.0;
+        ++it;
+    }
+    return result / compte;
+}
 
 int Individuo::calculateDistance(Individuo *individual){
 

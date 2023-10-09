@@ -11,7 +11,7 @@
 //#include <stdlib.h>
 #include "CommandLine.h"
 #include "Parameters.h"
-#include "Population.h"
+// #include "Population.h"
 #include "Genetic.h"
 #include "Util.h"
 #include <chrono>
@@ -19,6 +19,8 @@
 #include "Construction.h"
 #include "BuscaLocal.h"
 #include "Genetico.h"
+#include "Individuo.h"
+#include "Populacao.h"
 
 #define min(a, b) ((a < b) ? a : b)
 
@@ -86,35 +88,38 @@ int main(int argc, char* argv[]) {
                 // cout << endl << endl;
 
                 // getchar();
-               
-                vector<int> endTimeOperations;
-                vector<int> parent1, parent2;
-                cout << BICH_MIH(parameters, endTimeOperations, parent1) << endl;
-                cout << BICH_MIH(parameters, endTimeOperations, parent2) << endl;
-
-                vector<int> child;
 
                 Genetico *GE = new Genetico(parameters);
+               
+                Individuo *i1 = new Individuo(parameters);
+                Individuo *i2 = new Individuo(parameters);
 
-                for(int i = 0; i < parent1.size(); i++){
-                    cout << parent1[i] << " ";
+                // show chromosomes
+                for(int i =0; i < i1->chromosome.size(); i++){
+                    cout << i1->chromosome[i] << " ";
                 } cout << endl;
 
-                for(int i = 0; i < parent2.size(); i++){
-                    cout << parent2[i] << " ";
+                for(int i =0; i < i2->chromosome.size(); i++){
+                    cout << i2->chromosome[i] << " ";
                 } cout << endl;
 
-                cout << GE->crossoverOX(parent1, parent2, child) << endl;
+                cout << i1->calculateDistance(i2) << endl;
 
-                for(int i = 0; i < child.size(); i++){
-                    cout << child[i] << " ";
-                } cout << endl;
+                Populacao *p = new Populacao(parameters);
+
+                // p->addIndividuo(i1);
+                // p->addIndividuo(i2);
+
+                cout << p->subPopulation->numberIndividuals << endl;
 
                 totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
                 double finalTime = cpuTime() - parameters->cpuTime;
 
                 cout << finalTime << endl;
 
+                delete i1, i2;
+
+                
 
                 // Run genetic algorithm
                 /* Genetic solver(parameters, population, nb_ticks_allowed, false);
