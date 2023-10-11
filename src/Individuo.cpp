@@ -101,14 +101,14 @@ int Individuo::calculateDistance(Individuo *individual){
 
     int distance = 0;
     
-    vector<unsigned> nextOperaration(chromosome.size(), 0);
+    vector<unsigned> nextOperaration(chromosome.size() + 1, 0);
 
     for(int i = 0; i < chromosome.size() - 2; i++){
-        nextOperaration[chromosome[i] - 1] = chromosome[i + 1];
+        nextOperaration[chromosome[i]] = chromosome[i + 1];
     }
 
     for (unsigned int i = 1; i < individual->chromosome.size() - 2; i++) {
-        if (nextOperaration[individual->chromosome[i] - 1] != individual->chromosome[i + 1] && nextOperaration[individual->chromosome[i - 1] - 1] != individual->chromosome[i]) {
+        if (nextOperaration[individual->chromosome[i]] != individual->chromosome[i + 1] && nextOperaration[individual->chromosome[i - 1]] != individual->chromosome[i]) {
             distance++;
         }
     }
