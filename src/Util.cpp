@@ -94,14 +94,14 @@ double genrand_real2(void) {
 
 void randomize() {
     unsigned int seed;
-	seed = (unsigned int)time((time_t *)NULL);
+	//seed = (unsigned int)time((time_t *)NULL);
 
 #ifdef MTWISTER
 	printf("Using mersenne twister random number generator.\n");
 	init_genrand(seed);
 #else
 	printf("Using default random number generator.\n");
-	srand(seed);
+	//srand(seed);
 #endif
 	printf("Random seed is %d\n", seed);
 }
@@ -110,7 +110,7 @@ void setSeed(const unsigned int seed) {
 #ifdef MTWISTER
 	init_genrand(seed);
 #else
-	srand(seed);
+	//srand(seed);
 #endif
 }
 

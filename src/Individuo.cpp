@@ -3,6 +3,21 @@
 Individuo::Individuo(Parameters *parameters){
     this->parameters = parameters;
     this->makespan = BICH_MIH(parameters, endTimeOperations, chromosome);
+    this->age = 0;
+    this->fitRank = 0;
+    this->fitnessExt = 0;
+    this->divRank = 0;
+}
+
+Individuo::Individuo(Parameters *parameters, int c){
+    this->parameters = parameters;
+    this->makespan = 999999;
+    this->chromosome = vector<int>(parameters->numJobs * parameters->numTools, 0);
+    this->endTimeOperations = vector<int>(parameters->numJobs * parameters->numTools, 0);
+    this->age = 0;
+    this->fitRank = 0;
+    this->fitnessExt = 0;
+    this->divRank = 0;
 }
 
 Individuo::Individuo(){
@@ -25,6 +40,8 @@ unsigned int Individuo::calcMakespan(){
 
         J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
         M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
+
+        endTimeOperations[op-1] = M[indexJM.second];
     }
 
     return *max_element(M.begin(), M.end()) ;
@@ -53,6 +70,9 @@ void Individuo::recopyIndividual(Individuo *indiv){
     this->chromosome = indiv->chromosome;
     this->fitRank = indiv->fitRank;
     this->closest = indiv->closest;
+    this->fitnessExt = indiv->fitnessExt;
+    this->divRank = indiv->divRank;
+    this->age = 0;
 }
 
 
@@ -101,14 +121,14 @@ int Individuo::calculateDistance(Individuo *individual){
 
     int distance = 0;
     
-    vector<unsigned> nextOperaration(chromosome.size() + 1, 0);
+    vector<unsigned> nextOperaration(chromosome.size(), 0);
 
     for(int i = 0; i < chromosome.size() - 2; i++){
-        nextOperaration[chromosome[i]] = chromosome[i + 1];
+        nextOperaration[chromosome[i] - 1] = chromosome[i + 1];
     }
 
     for (unsigned int i = 1; i < individual->chromosome.size() - 2; i++) {
-        if (nextOperaration[individual->chromosome[i]] != individual->chromosome[i + 1] && nextOperaration[individual->chromosome[i - 1]] != individual->chromosome[i]) {
+        if (nextOperaration[individual->chromosome[i] - 1] != individual->chromosome[i + 1] && nextOperaration[individual->chromosome[i - 1] - 1] != individual->chromosome[i]) {
             distance++;
         }
     }

@@ -44,7 +44,7 @@ void Parameters::setAuxiliaryParams() {
     this->loadedMatrix = loadedMatrix;*/
 
     // cout << numJobs << endl;
-    vector<bool> positionsOffspring(numJobs);
+    vector<bool> positionsOffspring(numJobs*numTools);
     this->positionsOffspring = positionsOffspring;
 
     if (numJobs != 500) {
@@ -244,7 +244,7 @@ Parameters::Parameters(int seed, string instancesPaths, string instancesNames, s
 
     unsigned seed1 = time(0);
     // cout << seed1 << endl;
-    srand(seed1);
+    //srand(seed1);
 
     //getFiles();
 

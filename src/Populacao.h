@@ -31,9 +31,17 @@ public:
     SubPopulacao *subPopulation; ///< structure to handle the population
     Populacao(Parameters *parameters);
     ~Populacao();
-    int addIndividuo(Individuo *indiv);
+    int addIndividual(Individuo *indiv);
     void updateProximity(SubPopulacao *subPop, Individuo *indiv);
-    void removeIndividuo(SubPopulacao *subPop, int p);
+    void removeIndividual(SubPopulacao *subPop, int p);
+
+    int selectToRemove(SubPopulacao *subPop);
+    void updateAge();
+    void evalExtFit(SubPopulacao *subPop);
+    bool fitExist(SubPopulacao *subPop, Individuo *indiv);
+
+    Individuo* getIndividualBinT();
+    void diversify();
 
 };
 

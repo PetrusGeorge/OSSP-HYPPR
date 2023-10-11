@@ -7,16 +7,18 @@ using namespace std;
 
 #include "Parameters.h"
 #include "Construction.h"
+#include "Individuo.h"
 
 class BuscaLocal{
     private:
     public:
         Parameters *parameters;
+
         vector<int> U;
         vector<int> endTimeOperations;
         int makespan;
 
-        BuscaLocal(Parameters *parameters, vector<int> U, vector<int> endTimeOperations, int makespan);
+        BuscaLocal(Parameters *parameters);
         bool redundancySwapAdjacent(unsigned op1, unsigned op2);
         bool redundancySwap(const vector<int>& U, int index1, int index2);
         bool swap();
@@ -26,7 +28,7 @@ class BuscaLocal{
         bool relocateBlock3();
         bool relocateBlock4();
         bool searchNeighborhood(unsigned int i);
-        void runSearchTotal();
+        void runSearchTotal(Individuo *indiv);
 
 };
 

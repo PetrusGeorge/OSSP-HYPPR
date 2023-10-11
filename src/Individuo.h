@@ -20,16 +20,23 @@ typedef struct{
 
 class Individuo{
     private:
-        Parameters *parameters;
-        vector<int> endTimeOperations;
+       
     public:
+        Parameters *parameters;
         Individuo(Parameters *parameters);
+        Individuo(Parameters *parameters, int c);
         Individuo();
 
         vector<int> chromosome;
         unsigned int makespan;
+        vector<int> endTimeOperations;
+
+        unsigned age;
 
         float fitRank;
+        float fitnessExt;
+        float divRank;
+
         list<Proximity> closest;
 
         unsigned int calcMakespan();

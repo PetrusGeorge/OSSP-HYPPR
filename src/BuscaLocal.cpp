@@ -2,11 +2,8 @@
 #include <math.h>
 
 
-BuscaLocal::BuscaLocal(Parameters *parameters, vector<int> U, vector<int> endTimeOperations, int makespan){
-    this->makespan = makespan;
+BuscaLocal::BuscaLocal(Parameters *parameters){
     this->parameters = parameters;
-    this->U = U;
-    this->endTimeOperations = endTimeOperations;
 }
 
 bool BuscaLocal::redundancySwapAdjacent(unsigned op1, unsigned op2){
@@ -223,10 +220,16 @@ bool BuscaLocal::searchNeighborhood(unsigned int i) {
     
 }
 
-void BuscaLocal::runSearchTotal() {
+void BuscaLocal::runSearchTotal(Individuo *indiv) {
 
     bool foundBetter;
     double r;
+
+    U = indiv->chromosome;
+    endTimeOperations = indiv->endTimeOperations;
+    makespan = indiv->makespan;
+
+    cout << makespan << endl;
 
     while (true) {
         foundBetter = false;
@@ -236,4 +239,7 @@ void BuscaLocal::runSearchTotal() {
         if (!foundBetter) break;
     }
 
+    indiv->chromosome = U;
+    indiv->endTimeOperations = endTimeOperations;
+    indiv->makespan = makespan;
 }

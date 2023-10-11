@@ -3,6 +3,7 @@
 
 #include "Parameters.h"
 #include "Construction.h"
+#include "Populacao.h"
 #include "time.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -17,10 +18,16 @@ class Genetico
     private:
         Parameters *parameters;
 
+        int nbIterWithoutImprov; ///< number of iterations without improvement
+
+        int nbIter; ///< number of iterations
+
     public:
-        int crossoverOX(const vector<int>& parent1,const vector<int>& parent2, vector<int>& child);
-        Genetico(Parameters *parameters);
-        void evolve();
+        Populacao *population;
+
+        Individuo* crossoverOX(Individuo *parent1, Individuo *parent2);
+        Genetico(Parameters *parameters, Populacao *population);
+        void evolve(int maxIterWithoutImprov);
 
 };
 
