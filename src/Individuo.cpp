@@ -41,7 +41,7 @@ unsigned int Individuo::calcMakespan(){
         J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
         M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
 
-        endTimeOperations[op-1] = M[indexJM.second];
+        endTimeOperations[op-1] = M[indexJM.second] > J[indexJM.first] ? M[indexJM.second] : J[indexJM.first];
     }
 
     return *max_element(M.begin(), M.end()) ;

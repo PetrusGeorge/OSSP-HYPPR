@@ -229,8 +229,6 @@ void BuscaLocal::runSearchTotal(Individuo *indiv) {
     endTimeOperations = indiv->endTimeOperations;
     makespan = indiv->makespan;
 
-    cout << makespan << endl;
-
     while (true) {
         foundBetter = false;
         for (unsigned int i = 1; i <= parameters->nViz && !foundBetter; i++) {

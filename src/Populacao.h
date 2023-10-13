@@ -6,6 +6,7 @@
 #include <vector>
 #include <time.h>
 #include "Individuo.h"
+#include "BuscaLocal.h"
 
 using namespace std;
 
@@ -24,12 +25,14 @@ private:
 
     // insere individuo na população
     int placeIndividual(SubPopulacao *subPop, Individuo *indiv);
+    void education(Individuo *indiv);
 
     Parameters *parameters;
+    BuscaLocal *BL;
 public:
     // Individual *trainer; //< structure to instantiate only one individual for local search procedures
     SubPopulacao *subPopulation; ///< structure to handle the population
-    Populacao(Parameters *parameters);
+    Populacao(Parameters *parameters, BuscaLocal *BS);
     ~Populacao();
     int addIndividual(Individuo *indiv);
     void updateProximity(SubPopulacao *subPop, Individuo *indiv);
@@ -41,6 +44,7 @@ public:
     bool fitExist(SubPopulacao *subPop, Individuo *indiv);
 
     Individuo* getIndividualBinT();
+    Individuo *getBestIndividual();
     void diversify();
 
 };

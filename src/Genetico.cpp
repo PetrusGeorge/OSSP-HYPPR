@@ -1,8 +1,9 @@
 #include "Genetico.h"
 
-Genetico::Genetico(Parameters *parameters, Populacao *population) {
+Genetico::Genetico(Parameters *parameters, Populacao *population, BuscaLocal *BL) {
     this->parameters = parameters;
     this->population = population;
+    this->BL = BL;
 }
 
 void Genetico::evolve(int maxIterWithoutImprov){
@@ -21,24 +22,22 @@ void Genetico::evolve(int maxIterWithoutImprov){
     // Child reference
     Individuo *offspring = new Individuo(parameters);
 
-    // Individual used for local search
-    // trainer = new Individual(parameters);
-    // trainer->localSearch = new LocalSearch(parameters, trainer);
-
     while (nbIterWithoutImprov < maxIterWithoutImprov) {
+        //cout << "makespan: " << population->getBestIndividual()->makespan << " nbIterWithoutImprov: "<< nbIterWithoutImprov << endl;
         // CROSSOVER
         parent1 = population->getIndividualBinT(); // Pick individual by binary tournament
         parent2 = population->getIndividualBinT(); // Pick individual by binary tournament
 
         offspring = crossoverOX(parent1, parent2); // OX crossover
-
-        // Calculates second objective
-        // offspring->solutionCost.zeroBlocks = offspring->calcZeroBlocks();
+        cout << offspring->makespan << endl;
 
         // LOCAL SEARCH
-        // trainer->recopyIndividual(trainer, offspring);
-        // trainer->localSearch->runSearchTotal();
-        // offspring->recopyIndividual(offspring, trainer);
+        for(int i = 0; i < 10; i++){
+            BL->runSearchTotal(offspring);
+        }
+        
+
+        cout << offspring->makespan << endl;
 
         // Tries to add child to population
         place = population->addIndividual(offspring);

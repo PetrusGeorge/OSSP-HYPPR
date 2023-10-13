@@ -89,57 +89,47 @@ int main(int argc, char* argv[]) {
 
                 // getchar();
                
-                Individuo *i1 = new Individuo(parameters);
-                Individuo *i2 = new Individuo(parameters);
+                // Individuo *i1 = new Individuo(parameters);
+                // Individuo *i2 = new Individuo(parameters);
 
-                // show chromosomes
-                for(int i =0; i < i1->chromosome.size(); i++){
-                    cout << i1->chromosome[i] << " ";
-                } cout << endl;
+                // // show chromosomes
+                // for(int i =0; i < i1->chromosome.size(); i++){
+                //     cout << i1->chromosome[i] << " ";
+                // } cout << endl;
 
-                for(int i =0; i < i2->chromosome.size(); i++){
-                    cout << i2->chromosome[i] << " ";
-                } cout << endl;
+                // for(int i =0; i < i2->chromosome.size(); i++){
+                //     cout << i2->chromosome[i] << " ";
+                // } cout << endl;
 
                 // cout << i1->calculateDistance(i2) << endl;
 
-                parameters->maxPopulationSize = 0;
-
-                Populacao *p = new Populacao(parameters);
-
-                Genetico *GE = new Genetico(parameters, p);
                 BuscaLocal *BL = new BuscaLocal(parameters);
-                Individuo *i3 = GE->crossoverOX(i1, i2);
 
-                for(int i =0; i < i3->chromosome.size(); i++){
-                    cout << i3->chromosome[i] << " ";
-                } cout << endl;
+                Populacao *p = new Populacao(parameters, BL);
 
-                cout << i3->makespan << endl;
+                cout << p->getBestIndividual()->makespan << endl;
 
-                BL->runSearchTotal(i3);
+                Genetico *GE = new Genetico(parameters, p, BL);
 
-                for(int i =0; i < i3->chromosome.size(); i++){
-                    cout << i3->chromosome[i] << " ";
-                } cout << endl;
+                GE->evolve(1001);
 
-                cout << i3->makespan << endl;
-
-                // p->addIndividuo(i1);
-                // p->addIndividuo(i2);
-
+                cout << p->getBestIndividual()->makespan << endl;
                 
+                // Individuo *i3 = GE->crossoverOX(i1, i2);
 
-                // cout << p->subPopulation->numberIndividuals << endl;
-                // cout << p->getIndividualBinT()->makespan << endl;
-                // p->diversify();
-                // cout << p->subPopulation->numberIndividuals << endl;
-                // cout << p->getIndividualBinT()->makespan << endl;
-                // p->diversify();
-                // cout << p->subPopulation->numberIndividuals << endl;
-                // cout << p->getIndividualBinT()->makespan << endl;
+                // for(int i =0; i < i3->chromosome.size(); i++){
+                //     cout << i3->chromosome[i] << " ";
+                // } cout << endl;
 
-                // cout << parameters->maxPopulationSize << endl;
+                // cout << i3->makespan << endl;
+
+                // BL->runSearchTotal(i3);
+
+                // for(int i =0; i < i3->chromosome.size(); i++){
+                //     cout << i3->chromosome[i] << " ";
+                // } cout << endl;
+
+                // cout << i3->makespan << endl;
 
 
                 totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
@@ -147,7 +137,7 @@ int main(int argc, char* argv[]) {
 
                 cout << finalTime << endl;
 
-                delete i1, i2;
+                // delete i1, i2;
 
                 
 

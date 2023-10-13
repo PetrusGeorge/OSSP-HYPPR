@@ -1,23 +1,29 @@
 #include "Populacao.h"
 
-Populacao::Populacao(Parameters *parameters){
+Populacao::Populacao(Parameters *parameters, BuscaLocal *BL){
 
     this->parameters = parameters;
+    this->BL = BL;
+
     Individuo *randomIndiv;
     subPopulation = new SubPopulacao();
     subPopulation->numberIndividuals = 0;
 
-    // trainer = new Individual(parameters);
-    // trainer->localSearch = new LocalSearch(parameters, trainer);
-
-
     // Create the initial population
     for (unsigned int i = 0; i < parameters->populationSize; i++) {
         randomIndiv = new Individuo(parameters);
-        // education(randomIndiv);
+        education(randomIndiv);
         addIndividual(randomIndiv);
         delete randomIndiv;
     }
+}
+
+void Populacao::education(Individuo *indiv) {
+    Individuo *trainer = new Individuo(parameters, 0);
+    trainer->recopyIndividual(indiv);
+    BL->runSearchTotal(indiv);
+    indiv->recopyIndividual(trainer);
+    delete trainer;
 }
 
 Populacao::~Populacao() {
@@ -28,8 +34,6 @@ Populacao::~Populacao() {
             delete subPopulation->individuals[i];
         delete subPopulation;
     }
-    // delete trainer->localSearch;
-    // delete trainer;
 }
 
 void Populacao::updateProximity(SubPopulacao *subPop, Individuo *indiv) {
@@ -62,6 +66,29 @@ int Populacao::placeIndividual(SubPopulacao *subPop, Individuo *indiv) {
             return i + 1; // success
         }
     }
+
+
+    if(indiv->makespan == subPop->individuals[0]->makespan){
+        cout << indiv->makespan << endl;
+        // show chromosomes
+                for(int i =0; i < indiv->chromosome.size(); i++){
+                    cout << indiv->chromosome[i] << " ";
+                } cout << endl;
+
+                for(int i =0; i < subPop->individuals[0]->chromosome.size(); i++){
+                    cout << subPop->individuals[0]->chromosome[i] << " ";
+                } cout << endl;
+
+        cout << calculateMakespan(parameters, indiv->chromosome, indiv->endTimeOperations) << endl;
+        cout << calculateMakespan(parameters, subPop->individuals[0]->chromosome, subPop->individuals[0]->endTimeOperations) << endl;
+
+    }
+   
+    // if(subPop->numberIndividuals >= parameters->populationSize && !indiv->calculateDistance(subPop->individuals[0])){
+    //     cout <<subPop->individuals[1]->calculateDistance(subPop->individuals[0]) << endl;
+    //     subPop->individuals.erase(subPop->individuals.begin());
+    //     return -1;
+    // }
 
     subPop->individuals[0] = myIndiv;
     subPop->numberIndividuals++;
@@ -205,6 +232,13 @@ Individuo* Populacao::getIndividualBinT() {
         
 }
 
+Individuo *Populacao::getBestIndividual() {
+    if (subPopulation->numberIndividuals != 0)
+        return subPopulation->individuals[0];
+    else
+        return nullptr;
+}
+
 void Populacao::diversify() {
     Individuo *randomIndiv;
 
@@ -218,7 +252,7 @@ void Populacao::diversify() {
     // Create new individuals until minimum population size is reached
     for (unsigned int i = 0; i < parameters->populationSize; i++) {
         randomIndiv = new Individuo(parameters);
-        //education(randomIndiv);
+        education(randomIndiv);
         addIndividual(randomIndiv);
         delete randomIndiv;
     }

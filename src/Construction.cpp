@@ -25,7 +25,7 @@ int calculateMakespan(Parameters *parameters, vector <int> U, vector<int>& endTi
         J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
         M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
 
-        endTimeOperations[op-1] = M[indexJM.second];
+        endTimeOperations[op-1] = M[indexJM.second] > J[indexJM.first] ? M[indexJM.second] : J[indexJM.first];
 
         //cout << "J[" << jobNumber-1 << "]: " << J[jobNumber-1] << " M[" << machineNumber-1 << "]: " << M[machineNumber-1] << endl << endl;        
     }
@@ -66,7 +66,7 @@ inline void updateMJ(Parameters *parameters, vector<int>& M, vector<int>& J, uns
     J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
     M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
 
-    endTimeOperations[op-1] = M[indexJM.second];
+    endTimeOperations[op-1] = M[indexJM.second] > J[indexJM.first] ? M[indexJM.second] : J[indexJM.first];
 }
 
 int updateMakespan(Parameters *parameters, vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J){
