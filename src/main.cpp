@@ -27,7 +27,7 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    srand(5);
+    //srand(5);
     double bestCost;
     double averageCost, averageTime;
 
@@ -88,20 +88,7 @@ int main(int argc, char* argv[]) {
                 // cout << endl << endl;
 
                 // getchar();
-               
-                // Individuo *i1 = new Individuo(parameters);
-                // Individuo *i2 = new Individuo(parameters);
 
-                // // show chromosomes
-                // for(int i =0; i < i1->chromosome.size(); i++){
-                //     cout << i1->chromosome[i] << " ";
-                // } cout << endl;
-
-                // for(int i =0; i < i2->chromosome.size(); i++){
-                //     cout << i2->chromosome[i] << " ";
-                // } cout << endl;
-
-                // cout << i1->calculateDistance(i2) << endl;
 
                 BuscaLocal *BL = new BuscaLocal(parameters);
 
@@ -111,9 +98,17 @@ int main(int argc, char* argv[]) {
 
                 Genetico *GE = new Genetico(parameters, p, BL);
 
-                GE->evolve(1001);
+                GE->evolve(parameters->numJobs * 2000);
 
                 cout << p->getBestIndividual()->makespan << endl;
+
+                BL->runSearchTotal(p->getBestIndividual());
+
+                for(int i =0; i < p->subPopulation->individuals.size(); i++){
+                        cout << p->subPopulation->individuals[i]->makespan << " ";
+                } cout << endl;
+
+
                 
                 // Individuo *i3 = GE->crossoverOX(i1, i2);
 

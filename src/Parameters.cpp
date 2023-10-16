@@ -19,7 +19,7 @@ void Parameters::setMethodParams() {
     maxPopulationSize = 40;
     numberElite = 10;
     numberCloseIndividuals = 3;
-    maxDiversify = 1000;
+    maxDiversify = 50;
     terminate = false;
     jobsMovidos = 4;
 
@@ -194,13 +194,18 @@ void Parameters::readFile(const string &file) {
         jobsToolsMatrix = lines;
     }
 
+    vector<vector<unsigned int>> aux = jobsToolsMatrix;
+
     cout << "MATRIZ DE CUSTOS\n";
     for(int  i = 0; i < jobsToolsMatrix.size(); i++){
         for(int j = 0; j < jobsToolsMatrix[i].size(); j++){
-            cout << jobsToolsMatrix[i][j] << " "; //PROCESSAMENTO DO JOB I NA MAQUINA J
+            aux[j][i] = jobsToolsMatrix[i][j];
         }
         cout << endl;
     }
+
+    jobsToolsMatrix = aux;
+
     cout << endl;
     inFile.close();
 

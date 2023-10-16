@@ -12,7 +12,7 @@ Populacao::Populacao(Parameters *parameters, BuscaLocal *BL){
     // Create the initial population
     for (unsigned int i = 0; i < parameters->populationSize; i++) {
         randomIndiv = new Individuo(parameters);
-        education(randomIndiv);
+        //education(randomIndiv);
         addIndividual(randomIndiv);
         delete randomIndiv;
     }
@@ -46,7 +46,7 @@ void Populacao::updateProximity(SubPopulacao *subPop, Individuo *indiv) {
 }
 
 int Populacao::placeIndividual(SubPopulacao *subPop, Individuo *indiv) {
-    Individuo *myIndiv = new Individuo(parameters);
+    Individuo *myIndiv = new Individuo(parameters, 0);
 
     myIndiv->recopyIndividual(indiv);
 
@@ -54,6 +54,10 @@ int Populacao::placeIndividual(SubPopulacao *subPop, Individuo *indiv) {
     subPop->individuals.push_back(myIndiv);
 
     while (i >= 0) {
+        if(subPop->individuals[i]->makespan == indiv->makespan){
+            subPop->individuals.erase(subPop->individuals.begin()+i+1);
+            return -1;
+        }
         if (subPop->individuals[i]->makespan >= indiv->makespan) {
             subPop->individuals[i + 1] = subPop->individuals[i];
             i--;
@@ -67,25 +71,7 @@ int Populacao::placeIndividual(SubPopulacao *subPop, Individuo *indiv) {
         }
     }
 
-
-    if(indiv->makespan == subPop->individuals[0]->makespan){
-        cout << indiv->makespan << endl;
-        // show chromosomes
-                for(int i =0; i < indiv->chromosome.size(); i++){
-                    cout << indiv->chromosome[i] << " ";
-                } cout << endl;
-
-                for(int i =0; i < subPop->individuals[0]->chromosome.size(); i++){
-                    cout << subPop->individuals[0]->chromosome[i] << " ";
-                } cout << endl;
-
-        cout << calculateMakespan(parameters, indiv->chromosome, indiv->endTimeOperations) << endl;
-        cout << calculateMakespan(parameters, subPop->individuals[0]->chromosome, subPop->individuals[0]->endTimeOperations) << endl;
-
-    }
-   
-    // if(subPop->numberIndividuals >= parameters->populationSize && !indiv->calculateDistance(subPop->individuals[0])){
-    //     cout <<subPop->individuals[1]->calculateDistance(subPop->individuals[0]) << endl;
+    // if(subPop->numberIndividuals >= parameters->populationSize && indiv->makespan == subPop->individuals[0]->makespan){
     //     subPop->individuals.erase(subPop->individuals.begin());
     //     return -1;
     // }
@@ -103,7 +89,9 @@ int Populacao::addIndividual(Individuo *indiv) {
     bool firstIt = true;
 
     subPop = subPopulation;
+    // cout << "pré-place" << endl;
     result = placeIndividual(subPop, indiv);
+    // cout << "pos-place" << endl;
 
     // Keep only the survivors if the maximum size of the population has been reached
     if (result != -1 && subPop->numberIndividuals > parameters->populationSize + parameters->maxPopulationSize) {
@@ -252,7 +240,7 @@ void Populacao::diversify() {
     // Create new individuals until minimum population size is reached
     for (unsigned int i = 0; i < parameters->populationSize; i++) {
         randomIndiv = new Individuo(parameters);
-        education(randomIndiv);
+        //education(randomIndiv);
         addIndividual(randomIndiv);
         delete randomIndiv;
     }

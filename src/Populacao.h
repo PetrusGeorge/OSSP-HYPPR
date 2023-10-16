@@ -44,7 +44,7 @@ public:
     bool fitExist(SubPopulacao *subPop, Individuo *indiv);
 
     Individuo* getIndividualBinT();
-    Individuo *getBestIndividual();
+    Individuo* getBestIndividual();
     void diversify();
 
 };

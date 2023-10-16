@@ -21,26 +21,20 @@ void Genetico::evolve(int maxIterWithoutImprov){
 
     // Child reference
     Individuo *offspring = new Individuo(parameters);
+    int i =1;
 
     while (nbIterWithoutImprov < maxIterWithoutImprov) {
-        //cout << "makespan: " << population->getBestIndividual()->makespan << " nbIterWithoutImprov: "<< nbIterWithoutImprov << endl;
+        cout << i << " " << nbIterWithoutImprov << endl;
+        i++;
         // CROSSOVER
         parent1 = population->getIndividualBinT(); // Pick individual by binary tournament
         parent2 = population->getIndividualBinT(); // Pick individual by binary tournament
 
         offspring = crossoverOX(parent1, parent2); // OX crossover
-        cout << offspring->makespan << endl;
-
-        // LOCAL SEARCH
-        for(int i = 0; i < 10; i++){
-            BL->runSearchTotal(offspring);
-        }
-        
-
-        cout << offspring->makespan << endl;
 
         // Tries to add child to population
         place = population->addIndividual(offspring);
+
         if (place == -2) {
             return;
         }

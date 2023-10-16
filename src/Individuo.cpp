@@ -72,6 +72,7 @@ void Individuo::recopyIndividual(Individuo *indiv){
     this->closest = indiv->closest;
     this->fitnessExt = indiv->fitnessExt;
     this->divRank = indiv->divRank;
+    this->endTimeOperations = indiv->endTimeOperations;
     this->age = 0;
 }
 
