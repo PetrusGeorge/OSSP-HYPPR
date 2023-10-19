@@ -19,7 +19,7 @@ void Parameters::setMethodParams() {
     maxPopulationSize = 40;
     numberElite = 10;
     numberCloseIndividuals = 3;
-    maxDiversify = 50;
+    maxDiversify = 1000;
     terminate = false;
     jobsMovidos = 4;
 

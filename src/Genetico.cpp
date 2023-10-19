@@ -26,11 +26,12 @@ void Genetico::evolve(int maxIterWithoutImprov){
     while (nbIterWithoutImprov < maxIterWithoutImprov) {
         cout << i << " " << nbIterWithoutImprov << endl;
         i++;
-        // CROSSOVER
-        parent1 = population->getIndividualBinT(); // Pick individual by binary tournament
-        parent2 = population->getIndividualBinT(); // Pick individual by binary tournament
 
-        offspring = crossoverOX(parent1, parent2); // OX crossover
+        parent1 = population->getIndividualBinT(); // Pick individual by binary tournament
+        //parent2 = population->getIndividualBinT(); // Pick individual by binary tournament
+
+        //offspring = crossoverOX(parent1, parent2); // OX crossover
+        offspring = RR(parent1);
 
         // Tries to add child to population
         place = population->addIndividual(offspring);
@@ -124,3 +125,81 @@ Individuo* Genetico::crossoverOX(Individuo *parent1, Individuo *parent2) {
     
 }
 
+Individuo* Genetico::RR(Individuo * parent1) {
+    Individuo *offspring = new Individuo(parameters, 0);
+
+    offspring->recopyIndividual(parent1);
+
+    vector <int> opInseridos;
+    vector <int> :: iterator it;
+
+    int itr = 0;
+
+    while (itr <= parameters->jobsMovidos) {
+        int index = rand() % offspring->chromosome.size();
+        int op = offspring->chromosome[index];
+
+        it = find(opInseridos.begin(), opInseridos.end(), op);
+
+        while(it != opInseridos.end()) {
+            index = rand() % offspring->chromosome.size();
+            op = offspring->chromosome[index];
+
+            it = find(opInseridos.begin(), opInseridos.end(), op);
+        }
+
+        opInseridos.push_back(op);
+        itr++;
+    }
+
+    itr = 0;
+
+    while(itr <= parameters->jobsMovidos) {
+        int op = opInseridos[itr];
+        int erase = find(offspring->chromosome.begin(), offspring->chromosome.end(), op) - offspring->chromosome.begin();
+
+        offspring->chromosome.erase(offspring->chromosome.begin() + erase);
+
+        itr++;
+    }
+
+    itr = 0;
+
+    offspring->calcMakespan();
+    while(itr <= parameters->jobsMovidos) {
+        
+        int op = opInseridos[itr];
+        vector<int> M, J;
+
+        double bestMk = 9999999;
+        vector<int> times, bestTimes;
+        int p;
+
+        for(int i =0; i < offspring->chromosome.size()-1; i++){
+
+            times = offspring->endTimeOperations;
+            offspring->chromosome.insert(offspring->chromosome.begin() + i, op);
+
+            calculateJMbyIndex(parameters, times, i-1 >= 0 ? i-1 : 0, offspring->chromosome, M, J);
+            int mk = updateMakespan(parameters, times, i-1 >= 0 ? i-1 : 0, offspring->chromosome, M, J);
+
+            if(mk < bestMk){
+                bestMk = mk;
+                bestTimes = times;
+                p = i;
+            }
+
+            offspring->chromosome.erase(offspring->chromosome.begin() + i);
+        }
+
+        offspring->chromosome.insert(offspring->chromosome.begin() + p, op);
+        offspring->endTimeOperations = bestTimes;
+
+        itr++;
+    }
+
+    offspring->makespan = calculateMakespan(parameters, offspring->chromosome, offspring->endTimeOperations);
+
+    return offspring;
+
+}

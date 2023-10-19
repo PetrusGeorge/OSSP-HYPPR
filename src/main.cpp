@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
 
                 // getchar();
 
-
+                cout << parameters->jobsMovidos << endl;
                 BuscaLocal *BL = new BuscaLocal(parameters);
 
                 Populacao *p = new Populacao(parameters, BL);
@@ -98,16 +98,27 @@ int main(int argc, char* argv[]) {
 
                 Genetico *GE = new Genetico(parameters, p, BL);
 
-                GE->evolve(parameters->numJobs * 2000);
+                //cout << GE->RR(p->getBestIndividual())->calcMakespan() << endl;
+
+                GE->evolve(parameters->numJobs * 40);
 
                 cout << p->getBestIndividual()->makespan << endl;
 
                 BL->runSearchTotal(p->getBestIndividual());
 
-                for(int i =0; i < p->subPopulation->individuals.size(); i++){
-                        cout << p->subPopulation->individuals[i]->makespan << " ";
+                cout << p->getBestIndividual()->makespan << endl;
+
+                for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
+                        cout << p->getBestIndividual()->chromosome[i] << " ";
                 } cout << endl;
 
+                p->getBestIndividual()->chromosome = {10,8,3,14,9,1,7,15,12,16,4,6,11,13,2,5};
+
+                for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
+                        cout << p->getBestIndividual()->chromosome[i] << " ";
+                } cout << endl;
+
+                cout << p->getBestIndividual()->calcMakespan() << endl;
 
                 
                 // Individuo *i3 = GE->crossoverOX(i1, i2);

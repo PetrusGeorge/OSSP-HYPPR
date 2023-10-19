@@ -31,6 +31,7 @@ class Genetico
         Individuo* crossoverOX(Individuo *parent1, Individuo *parent2);
         Genetico(Parameters *parameters, Populacao *population, BuscaLocal *BL);
         void evolve(int maxIterWithoutImprov);
+        Individuo* RR(Individuo * parent1);
 
 };
 
