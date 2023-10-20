@@ -32,6 +32,8 @@ void Genetico::evolve(int maxIterWithoutImprov){
 
         //offspring = crossoverOX(parent1, parent2); // OX crossover
         offspring = RR(parent1);
+        BL->runSearchTotal(offspring); // Local search
+        //if(!offspring->verifySequence()) continue;
 
         // Tries to add child to population
         place = population->addIndividual(offspring);
@@ -130,41 +132,70 @@ Individuo* Genetico::RR(Individuo * parent1) {
 
     offspring->recopyIndividual(parent1);
 
-    vector <int> opInseridos;
+    //cout << "INICIAL: " << offspring->makespan << endl;
+
     vector <int> :: iterator it;
 
-    int itr = 0;
+    int m = rand() % parameters->numTools;
 
-    while (itr <= parameters->jobsMovidos) {
-        int index = rand() % offspring->chromosome.size();
-        int op = offspring->chromosome[index];
+    vector<int> opsOfMachines;
+    vector<int> indexOfMachines;
 
-        it = find(opInseridos.begin(), opInseridos.end(), op);
+    //cout << "machine m: " << m+1 << endl;
 
-        while(it != opInseridos.end()) {
-            index = rand() % offspring->chromosome.size();
-            op = offspring->chromosome[index];
+    for(int i =0; i < offspring->chromosome.size(); i++){
+        int op = offspring->chromosome[i];
+        int machineOp = decryptJobMachineIndex(op, parameters->numJobs).second;
 
-            it = find(opInseridos.begin(), opInseridos.end(), op);
+        if(machineOp == m) {
+            opsOfMachines.push_back(op);
+            indexOfMachines.push_back(i);
         }
-
-        opInseridos.push_back(op);
-        itr++;
     }
 
-    itr = 0;
+    // show opInseridos
+    /*
+    for(int i =0; i < opsOfMachines.size(); i++){
+        cout << opsOfMachines[i] << " ";
+    } cout << endl;
 
-    while(itr <= parameters->jobsMovidos) {
-        int op = opInseridos[itr];
-        int erase = find(offspring->chromosome.begin(), offspring->chromosome.end(), op) - offspring->chromosome.begin();
+    //show offspring chromosome
+    for(int i =0; i < offspring->chromosome.size(); i++){
+        cout << offspring->chromosome[i] << " ";
+    } cout << endl;
 
-        offspring->chromosome.erase(offspring->chromosome.begin() + erase);
+    // show indexMachine
 
-        itr++;
+    for(int i =0; i < indexOfMachines.size(); i++){
+        cout << indexOfMachines[i] << " ";
+    } cout << endl;
+    */
+
+
+    while(indexOfMachines.size() > 0){
+        int indexRandIndex = rand() % indexOfMachines.size();
+        int randIndex = indexOfMachines[indexRandIndex];
+
+        int indexRandOp = rand() % opsOfMachines.size();
+        int randOp = opsOfMachines[indexRandOp];
+
+        //cout << "randIndex: " << randIndex << " randOp: " << randOp << endl;
+
+        indexOfMachines.erase(indexOfMachines.begin() + indexRandIndex);
+        opsOfMachines.erase(opsOfMachines.begin() + indexRandOp);
+
+        offspring->chromosome[randIndex] = randOp;
+        /*
+
+        for(int i =0; i < offspring->chromosome.size(); i++){
+            cout << offspring->chromosome[i] << " ";
+        } cout << endl;
+        */
     }
+    
+    //cout <<  offspring->calcMakespan() << endl;
 
-    itr = 0;
-
+    /*
     offspring->calcMakespan();
     while(itr <= parameters->jobsMovidos) {
         
@@ -198,8 +229,10 @@ Individuo* Genetico::RR(Individuo * parent1) {
         itr++;
     }
 
-    offspring->makespan = calculateMakespan(parameters, offspring->chromosome, offspring->endTimeOperations);
+    
+*/
 
+    offspring->makespan = calculateMakespan(parameters, offspring->chromosome, offspring->endTimeOperations);
     return offspring;
 
 }

@@ -47,6 +47,7 @@ class Individuo{
         double distToClosests(int n);
 
         void recopyIndividual(Individuo *indiv);
+        bool verifySequence();
 };
 
 #endif

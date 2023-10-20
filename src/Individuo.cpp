@@ -136,3 +136,25 @@ int Individuo::calculateDistance(Individuo *individual){
 
     return distance;
 }
+
+bool Individuo::verifySequence(){
+    vector<int> machines;
+
+    for(int i = 0; i < chromosome.size(); i++){
+        machines = vector<int>(parameters->numTools, 0);
+
+        for(int j = 0; j < parameters->numTools; j++){
+            int m = decryptJobMachineIndex(chromosome[i+j], parameters->numJobs).second;
+            //cout << m << endl;
+            if(machines[m] == 1){
+                return false;
+            }
+            machines[m] = 1;
+        }
+
+        i = i + parameters->numTools - 1;
+    }
+
+    return true;
+
+}

@@ -89,6 +89,12 @@ int main(int argc, char* argv[]) {
 
                 // getchar();
 
+
+                /*
+                */
+
+               Individuo *i1 = new Individuo(parameters);
+
                 cout << parameters->jobsMovidos << endl;
                 BuscaLocal *BL = new BuscaLocal(parameters);
 
@@ -98,11 +104,20 @@ int main(int argc, char* argv[]) {
 
                 Genetico *GE = new Genetico(parameters, p, BL);
 
+                //GE->RR(p->getBestIndividual());
+
+               // cout << p->getBestIndividual()->verifySequence() << endl;
+
                 //cout << GE->RR(p->getBestIndividual())->calcMakespan() << endl;
 
+                
                 GE->evolve(parameters->numJobs * 40);
 
                 cout << p->getBestIndividual()->makespan << endl;
+
+                for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
+                        cout << p->getBestIndividual()->chromosome[i] << " ";
+                } cout << endl;
 
                 BL->runSearchTotal(p->getBestIndividual());
 
@@ -111,14 +126,16 @@ int main(int argc, char* argv[]) {
                 for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
                         cout << p->getBestIndividual()->chromosome[i] << " ";
                 } cout << endl;
+                
 
-                p->getBestIndividual()->chromosome = {10,8,3,14,9,1,7,15,12,16,4,6,11,13,2,5};
+                cout << p->getBestIndividual()->verifySequence() << endl;
 
-                for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
-                        cout << p->getBestIndividual()->chromosome[i] << " ";
-                } cout << endl;
+                p->getBestIndividual()->chromosome = {2, 4, 7, 3, 9, 5, 1, 6, 8};
 
                 cout << p->getBestIndividual()->calcMakespan() << endl;
+
+                cout << p->getBestIndividual()->verifySequence() << endl;
+
 
                 
                 // Individuo *i3 = GE->crossoverOX(i1, i2);

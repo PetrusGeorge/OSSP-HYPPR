@@ -206,17 +206,8 @@ bool BuscaLocal::relocateBlock(int blockSize){
 
 bool BuscaLocal::searchNeighborhood(unsigned int i) {
        
-    if (i == 1) {
-        return relocate();
-    } else if (i == 2) {
-        return relocateBlock(i);
-    } else if (i == 3) {    
-        return relocateBlock(i);
-    } else if (i == 4) {
-        return relocateBlock(i);
-    } else { 
+
         return swap();
-    }
     
 }
 
