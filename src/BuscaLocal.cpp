@@ -28,12 +28,12 @@ bool BuscaLocal::redundancySwap(const vector<int>& U, int index1, int index2){
     for(int i = index1+1; i < index2; i++){
         pair<int, int> o = decryptJobMachineIndex(U[i], parameters->numJobs);
         if(o.first == o1.first || o.first == o2.first)
-            return true;
+            return false;
         if(o.second == o1.second || o.second == o2.second)
-            return true;
+            return false;
     }
 
-    return false;
+    return true;
 
 }
 
@@ -62,8 +62,16 @@ bool BuscaLocal::swap(){
             sequence[i] = sequence[j];
             sequence[j] = aux;
 
-            calculateJMbyIndex(parameters, times, j-1, sequence, M, J);
-            int mk = updateMakespan(parameters, times, j-1, sequence, M, J);
+            int mk;
+
+            if(i>j) {
+                calculateJMbyIndex(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J);
+                mk = updateMakespan(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J);
+            }
+            else {
+                calculateJMbyIndex(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J);
+                mk = updateMakespan(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J);
+            }
 
             if(mk < bestMakespan){
                 bestMakespan = mk;
@@ -205,10 +213,17 @@ bool BuscaLocal::relocateBlock(int blockSize){
 }
 
 bool BuscaLocal::searchNeighborhood(unsigned int i) {
-       
-
+    if (i == 1) {
+        return relocate();
+    } else if (i == 2) {
+        return relocateBlock(i);
+    } else if (i == 3) {    
+        return relocateBlock(i);
+    } else if (i == 4) {
+        return relocateBlock(i);
+    } else { 
         return swap();
-    
+    }   
 }
 
 void BuscaLocal::runSearchTotal(Individuo *indiv) {

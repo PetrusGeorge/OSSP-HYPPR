@@ -32,6 +32,7 @@ class Genetico
         Genetico(Parameters *parameters, Populacao *population, BuscaLocal *BL);
         void evolve(int maxIterWithoutImprov);
         Individuo* RR(Individuo * parent1);
+        Individuo* swapGenetic(Individuo * parent1);
 
 };
 

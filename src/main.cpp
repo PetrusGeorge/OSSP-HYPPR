@@ -27,7 +27,7 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    //srand(5);
+    srand(time(NULL));
     double bestCost;
     double averageCost, averageTime;
 
@@ -93,8 +93,6 @@ int main(int argc, char* argv[]) {
                 /*
                 */
 
-               Individuo *i1 = new Individuo(parameters);
-
                 cout << parameters->jobsMovidos << endl;
                 BuscaLocal *BL = new BuscaLocal(parameters);
 
@@ -102,22 +100,21 @@ int main(int argc, char* argv[]) {
 
                 cout << p->getBestIndividual()->makespan << endl;
 
+                for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
+                        cout << p->getBestIndividual()->chromosome[i] << " ";
+                } cout << endl;
+
                 Genetico *GE = new Genetico(parameters, p, BL);
 
-                //GE->RR(p->getBestIndividual());
-
-               // cout << p->getBestIndividual()->verifySequence() << endl;
-
-                //cout << GE->RR(p->getBestIndividual())->calcMakespan() << endl;
-
-                
-                GE->evolve(parameters->numJobs * 40);
+                GE->evolve(parameters->numJobs * 100);
 
                 cout << p->getBestIndividual()->makespan << endl;
 
                 for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
                         cout << p->getBestIndividual()->chromosome[i] << " ";
                 } cout << endl;
+
+                cout << p->getBestIndividual()->verifySequence() << endl;
 
                 BL->runSearchTotal(p->getBestIndividual());
 
@@ -126,42 +123,11 @@ int main(int argc, char* argv[]) {
                 for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
                         cout << p->getBestIndividual()->chromosome[i] << " ";
                 } cout << endl;
-                
-
-                cout << p->getBestIndividual()->verifySequence() << endl;
-
-                p->getBestIndividual()->chromosome = {2, 4, 7, 3, 9, 5, 1, 6, 8};
-
-                cout << p->getBestIndividual()->calcMakespan() << endl;
-
-                cout << p->getBestIndividual()->verifySequence() << endl;
-
-
-                
-                // Individuo *i3 = GE->crossoverOX(i1, i2);
-
-                // for(int i =0; i < i3->chromosome.size(); i++){
-                //     cout << i3->chromosome[i] << " ";
-                // } cout << endl;
-
-                // cout << i3->makespan << endl;
-
-                // BL->runSearchTotal(i3);
-
-                // for(int i =0; i < i3->chromosome.size(); i++){
-                //     cout << i3->chromosome[i] << " ";
-                // } cout << endl;
-
-                // cout << i3->makespan << endl;
-
 
                 totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
                 double finalTime = cpuTime() - parameters->cpuTime;
 
                 cout << finalTime << endl;
-
-                // delete i1, i2;
-
                 
 
                 // Run genetic algorithm
