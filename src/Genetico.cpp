@@ -193,9 +193,11 @@ Individuo* Genetico::RR(Individuo * parent1) {
     vector <int> :: iterator it;
 
     int m = rand() % parameters->numTools;
+    //cout << "machine: " << m+1 << endl;
 
     vector<int> opsOfMachines;
-    vector<int> indexOfMachines;
+
+    int erase = 0;
 
     for(int i =0; i < offspring->chromosome.size(); i++){
         int op = offspring->chromosome[i];
@@ -203,23 +205,96 @@ Individuo* Genetico::RR(Individuo * parent1) {
 
         if(machineOp == m) {
             opsOfMachines.push_back(op);
-            indexOfMachines.push_back(i);
+
+            int index = find(offspring->chromosome.begin(), offspring->chromosome.end(), op) - offspring->chromosome.begin();
+            offspring->chromosome.erase(offspring->chromosome.begin() + index);
         }
     }
 
-    while(indexOfMachines.size() > 0){
-        int indexRandIndex = rand() % indexOfMachines.size();
-        int randIndex = indexOfMachines[indexRandIndex];
+    // show offspring
 
-        int indexRandOp = rand() % opsOfMachines.size();
-        int randOp = opsOfMachines[indexRandOp];
+    // for(int i =0; i < offspring->chromosome.size(); i++){
+    //     cout << offspring->chromosome[i] << " ";
+    // } cout << endl;
 
-        indexOfMachines.erase(indexOfMachines.begin() + indexRandIndex);
-        opsOfMachines.erase(opsOfMachines.begin() + indexRandOp);
 
-        offspring->chromosome[randIndex] = randOp;
-    } 
+    while(opsOfMachines.size() > 0){
+        int op = opsOfMachines[0];
+        int machinesPassed = 0;
 
+        vector<int> sequence, times;
+        vector<int> M, J;
+
+        //cout << "operação: " << op << endl;
+
+        int bestMk = 99999;
+        int bestIndex;
+        vector<int> bestTimes = offspring->endTimeOperations;
+
+        for(int i =0; i <= offspring->chromosome.size(); i++){
+            sequence = offspring->chromosome;
+            times = offspring->endTimeOperations;
+
+            //cout << "machines passed: " << machinesPassed << " i: " << i << endl;
+
+            if(machinesPassed == parameters->numTools-1 && decryptJobMachineIndex(offspring->chromosome[i], parameters->numJobs).second == m){
+                machinesPassed = 0;
+                continue;
+            }
+
+            if(machinesPassed == parameters->numTools-1){        
+                //cout << "dentro do if: " << i << endl;
+                
+                sequence.insert(sequence.begin() + i, op);
+                //show sequence
+
+                // for(int i =0; i < sequence.size(); i++){
+                //     cout << sequence[i] << " ";
+                // } cout << endl;
+
+                calculateJMbyIndex(parameters, times, i-1 > 0 ? i-1 : 0, sequence, M, J);
+                int mk = updateMakespan(parameters, times, i-1 > 0 ? i-1 : 0, sequence, M, J);
+
+                // calculateMakespan(parameters, sequence, times);
+
+                if(mk < bestMk){
+                    bestMk = mk;
+                    bestIndex = i;
+                    bestTimes = times;
+                }
+
+                machinesPassed = 1;
+                continue;
+            }
+
+            //cout << "pos-if" << endl;
+
+            int machineOp = decryptJobMachineIndex(offspring->chromosome[i], parameters->numJobs).second;
+            if(machineOp != m) {
+                machinesPassed++;
+            }
+        }
+
+        offspring->chromosome.insert(offspring->chromosome.begin() + bestIndex, op);
+        offspring->endTimeOperations = bestTimes;
+
+        opsOfMachines.erase(opsOfMachines.begin());
+    }
+
+    // while(indexOfMachines.size() > 0){
+    //     int indexRandIndex = rand() % indexOfMachines.size();
+    //     int randIndex = indexOfMachines[indexRandIndex];
+
+    //     int indexRandOp = rand() % opsOfMachines.size();
+    //     int randOp = opsOfMachines[indexRandOp];
+
+    //     indexOfMachines.erase(indexOfMachines.begin() + indexRandIndex);
+    //     opsOfMachines.erase(opsOfMachines.begin() + indexRandOp);
+
+    //     offspring->chromosome[randIndex] = randOp;
+    // } 
+
+    
     offspring->makespan = calculateMakespan(parameters, offspring->chromosome, offspring->endTimeOperations);
     return offspring;
 

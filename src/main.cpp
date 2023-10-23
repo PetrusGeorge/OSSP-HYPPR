@@ -106,7 +106,11 @@ int main(int argc, char* argv[]) {
 
                 Genetico *GE = new Genetico(parameters, p, BL);
 
-                GE->evolve(parameters->numJobs * 100);
+                // Individuo *i1 = GE->RR(p->getBestIndividual());
+
+                // cout << i1->verifySequence() << endl;
+
+                GE->evolve(parameters->numJobs * 20);
 
                 cout << p->getBestIndividual()->makespan << endl;
 
@@ -116,13 +120,13 @@ int main(int argc, char* argv[]) {
 
                 cout << p->getBestIndividual()->verifySequence() << endl;
 
-                BL->runSearchTotal(p->getBestIndividual());
+                // BL->runSearchTotal(p->getBestIndividual());
 
-                cout << p->getBestIndividual()->makespan << endl;
+                // cout << p->getBestIndividual()->makespan << endl;
 
-                for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
-                        cout << p->getBestIndividual()->chromosome[i] << " ";
-                } cout << endl;
+                // for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
+                //         cout << p->getBestIndividual()->chromosome[i] << " ";
+                // } cout << endl;
 
                 totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
                 double finalTime = cpuTime() - parameters->cpuTime;
