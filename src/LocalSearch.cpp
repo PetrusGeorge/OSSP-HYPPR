@@ -1,12 +1,12 @@
-#include "BuscaLocal.h"
+#include "LocalSearch.h"
 #include <math.h>
 
 
-BuscaLocal::BuscaLocal(Parameters *parameters){
+LocalSearch::LocalSearch(Parameters *parameters){
     this->parameters = parameters;
 }
 
-bool BuscaLocal::redundancySwapAdjacent(unsigned op1, unsigned op2){
+bool LocalSearch::redundancySwapAdjacent(unsigned op1, unsigned op2){
     pair<int, int> o1 = decryptJobMachineIndex(op1, parameters->numJobs);
     pair<int, int> o2 = decryptJobMachineIndex(op2, parameters->numJobs);
 
@@ -17,7 +17,7 @@ bool BuscaLocal::redundancySwapAdjacent(unsigned op1, unsigned op2){
     return false;
 }
 
-bool BuscaLocal::redundancySwap(const vector<int>& U, int index1, int index2){
+bool LocalSearch::redundancySwap(const vector<int>& U, int index1, int index2){
     pair<int, int> o1 = decryptJobMachineIndex(U[index1], parameters->numJobs);
     pair<int, int> o2 = decryptJobMachineIndex(U[index2], parameters->numJobs);
 
@@ -38,7 +38,7 @@ bool BuscaLocal::redundancySwap(const vector<int>& U, int index1, int index2){
 }
 
 
-bool BuscaLocal::swap(){
+bool LocalSearch::swap(){
     vector<int> sequence;
     vector<int> bestSequence = U;
     int bestMakespan = makespan;
@@ -92,7 +92,7 @@ bool BuscaLocal::swap(){
     return false;
 }
 
-bool BuscaLocal::relocate(){
+bool LocalSearch::relocate(){
     vector<int> sequence;
     vector<int> bestSequence = U;
     int bestMakespan = makespan;
@@ -146,7 +146,7 @@ bool BuscaLocal::relocate(){
 
 }
 
-bool BuscaLocal::relocateBlock(int blockSize){
+bool LocalSearch::relocateBlock(int blockSize){
     
     vector<int> sequence;
     vector<int> bestSequence = U;
@@ -212,7 +212,7 @@ bool BuscaLocal::relocateBlock(int blockSize){
 
 }
 
-bool BuscaLocal::searchNeighborhood(unsigned int i) {
+bool LocalSearch::searchNeighborhood(unsigned int i) {
     if (i == 1) {
         return relocate();
     } else if (i == 2) {
@@ -226,7 +226,7 @@ bool BuscaLocal::searchNeighborhood(unsigned int i) {
     }   
 }
 
-void BuscaLocal::runSearchTotal(Individuo *indiv) {
+void LocalSearch::runSearchTotal(Individual *indiv) {
 
     bool foundBetter;
     double r;
@@ -237,7 +237,7 @@ void BuscaLocal::runSearchTotal(Individuo *indiv) {
 
     while (true) {
         foundBetter = false;
-        for (unsigned int i = 1; i <= parameters->nViz && !foundBetter; i++) {
+        for (unsigned int i = 1; i <= parameters->nIterNeighborhood && !foundBetter; i++) {
             foundBetter = searchNeighborhood(i);
         }
         if (!foundBetter) break;

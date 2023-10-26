@@ -31,7 +31,7 @@ class Parameters {
         unsigned int maxCapacity;
         vector<vector<unsigned int> > jobsToolsMatrix;
 
-        unsigned int nViz;
+        unsigned int nIterNeighborhood;
 
         // Alpha for BICH_MIH
         double alpha;
@@ -47,7 +47,7 @@ class Parameters {
 
 
 
-        Parameters(int seed, string instancePath, unsigned int populationSize, unsigned int maxPopulationSize, unsigned int maxDiversify);
+        Parameters(string instancePath);
 };
 
 #endif //PARAMETERS_H

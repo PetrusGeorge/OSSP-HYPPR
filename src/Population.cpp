@@ -1,32 +1,32 @@
-#include "Populacao.h"
+#include "Population.h"
 
-Populacao::Populacao(Parameters *parameters, BuscaLocal *BL){
+Population::Population(Parameters *parameters, LocalSearch *BL){
 
     this->parameters = parameters;
     this->BL = BL;
 
-    Individuo *randomIndiv;
-    subPopulation = new SubPopulacao();
+    Individual *randomIndiv;
+    subPopulation = new SubPopulation();
     subPopulation->numberIndividuals = 0;
 
     // Create the initial population
     for (unsigned int i = 0; i < parameters->populationSize; i++) {
-        randomIndiv = new Individuo(parameters);
+        randomIndiv = new Individual(parameters);
         //education(randomIndiv);
         addIndividual(randomIndiv);
         delete randomIndiv;
     }
 }
 
-void Populacao::education(Individuo *indiv) {
-    Individuo *trainer = new Individuo(parameters, 0);
+void Population::education(Individual *indiv) {
+    Individual *trainer = new Individual(parameters, 0);
     trainer->recopyIndividual(indiv);
     BL->runSearchTotal(indiv);
     indiv->recopyIndividual(trainer);
     delete trainer;
 }
 
-Populacao::~Populacao() {
+Population::~Population() {
     int size;
     if (subPopulation != nullptr) {
         size = (int)subPopulation->individuals.size();
@@ -36,7 +36,7 @@ Populacao::~Populacao() {
     }
 }
 
-void Populacao::updateProximity(SubPopulacao *subPop, Individuo *indiv) {
+void Population::updateProximity(SubPopulation *subPop, Individual *indiv) {
     for (int k = 0; k < subPop->numberIndividuals; k++) {
         if (subPop->individuals[k] != indiv) {
             subPop->individuals[k]->addClose(indiv);
@@ -45,8 +45,8 @@ void Populacao::updateProximity(SubPopulacao *subPop, Individuo *indiv) {
     }
 }
 
-int Populacao::placeIndividual(SubPopulacao *subPop, Individuo *indiv) {
-    Individuo *myIndiv = new Individuo(parameters, 0);
+int Population::placeIndividual(SubPopulation *subPop, Individual *indiv) {
+    Individual *myIndiv = new Individual(parameters, 0);
 
     myIndiv->recopyIndividual(indiv);
 
@@ -83,8 +83,8 @@ int Populacao::placeIndividual(SubPopulacao *subPop, Individuo *indiv) {
     return 0;
 }
 
-int Populacao::addIndividual(Individuo *indiv) {
-    SubPopulacao *subPop;
+int Population::addIndividual(Individual *indiv) {
+    SubPopulation *subPop;
     int k, result;
     bool firstIt = true;
 
@@ -106,8 +106,8 @@ int Populacao::addIndividual(Individuo *indiv) {
     return result;
 }
 
-void Populacao::removeIndividual(SubPopulacao *subPop, int p) {
-    Individuo *remIndiv = subPop->individuals[p];
+void Population::removeIndividual(SubPopulation *subPop, int p) {
+    Individual *remIndiv = subPop->individuals[p];
 
     // Place individual at the end
     for (int i = p + 1; i < (int)subPop->individuals.size(); i++)
@@ -124,7 +124,7 @@ void Populacao::removeIndividual(SubPopulacao *subPop, int p) {
     delete remIndiv;
 }
 
-int Populacao::selectToRemove(SubPopulacao *subPop) {
+int Population::selectToRemove(SubPopulation *subPop) {
     // Select one individual to be eliminated from the population
     vector<int> position;
     int temp, toRemove;
@@ -160,13 +160,13 @@ int Populacao::selectToRemove(SubPopulacao *subPop) {
     return toRemove;
 }
 
-void Populacao::updateAge() {
+void Population::updateAge() {
     for (int i = 0; i < subPopulation->numberIndividuals; i++)
         subPopulation->individuals[i]->age++;
 }
 
 
-void Populacao::evalExtFit(SubPopulacao *subPop) {
+void Population::evalExtFit(SubPopulation *subPop) {
     int temp;
     vector<int> position;
     vector<double> distances;
@@ -195,9 +195,9 @@ void Populacao::evalExtFit(SubPopulacao *subPop) {
     }
 }
 
-Individuo* Populacao::getIndividualBinT() {
-    Individuo *individual1;
-    Individuo *individual2;
+Individual* Population::getIndividualBinT() {
+    Individual *individual1;
+    Individual *individual2;
     int place1, place2;
 
     // Pick the first individual
@@ -220,15 +220,15 @@ Individuo* Populacao::getIndividualBinT() {
         
 }
 
-Individuo *Populacao::getBestIndividual() {
+Individual *Population::getBestIndividual() {
     if (subPopulation->numberIndividuals != 0)
         return subPopulation->individuals[0];
     else
         return nullptr;
 }
 
-void Populacao::diversify() {
-    Individuo *randomIndiv;
+void Population::diversify() {
+    Individual *randomIndiv;
 
     // Remove 70% of the population
     while (subPopulation->numberIndividuals > (int)(0.3 * (double)parameters->populationSize)) {
@@ -239,14 +239,14 @@ void Populacao::diversify() {
 
     // Create new individuals until minimum population size is reached
     for (unsigned int i = 0; i < parameters->populationSize; i++) {
-        randomIndiv = new Individuo(parameters);
+        randomIndiv = new Individual(parameters);
         //education(randomIndiv);
         addIndividual(randomIndiv);
         delete randomIndiv;
     }
 }
 
-// bool Populacao::fitExist(SubPopulacao *subPop, Individuo *indiv) {
+// bool Population::fitExist(SubPopulation *subPop, Individual *indiv) {
 //     unsigned int count = 0;
 //     unsigned int distance = indiv->makespan;
 

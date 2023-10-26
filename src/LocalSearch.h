@@ -1,5 +1,5 @@
-#ifndef BUSCALOCAL_H
-#define BUSCALOCAL_H
+#ifndef LocalSearch_H
+#define LocalSearch_H
 
 #define EPSILON 0.0000001
 
@@ -7,9 +7,9 @@ using namespace std;
 
 #include "Parameters.h"
 #include "Construction.h"
-#include "Individuo.h"
+#include "Individual.h"
 
-class BuscaLocal{
+class LocalSearch{
     private:
     public:
         Parameters *parameters;
@@ -18,7 +18,7 @@ class BuscaLocal{
         vector<int> endTimeOperations;
         int makespan;
 
-        BuscaLocal(Parameters *parameters);
+        LocalSearch(Parameters *parameters);
         bool redundancySwapAdjacent(unsigned op1, unsigned op2);
         bool redundancySwap(const vector<int>& U, int index1, int index2);
         bool swap();
@@ -28,7 +28,7 @@ class BuscaLocal{
         bool relocateBlock3();
         bool relocateBlock4();
         bool searchNeighborhood(unsigned int i);
-        void runSearchTotal(Individuo *indiv);
+        void runSearchTotal(Individual *indiv);
 
 };
 

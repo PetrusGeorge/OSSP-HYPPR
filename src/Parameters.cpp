@@ -11,8 +11,8 @@ void Parameters::setMethodParams() {
     this->positionsOffspring = vector<bool>(numJobs*numTools, false);
 
     if (numJobs != 500) {
-        nViz = 5;
+        nIterNeighborhood = 5;
     } else {
-        nViz = 4;
+        nIterNeighborhood = 4;
     }
 }

@@ -1,13 +1,13 @@
-#include "Genetico.h"
+#include "Genetic.h"
 
-Genetico::Genetico(Parameters *parameters, Populacao *population, BuscaLocal *BL) {
+Genetic::Genetic(Parameters *parameters, Population *population, LocalSearch *BL) {
     this->parameters = parameters;
     this->population = population;
     this->BL = BL;
 }
 
-Individuo * Genetico::swapGenetic(Individuo *parent1){
-    Individuo* offspring = new Individuo(parameters, 0);
+Individual * Genetic::swapGenetic(Individual *parent1){
+    Individual* offspring = new Individual(parameters, 0);
 
     offspring->recopyIndividual(parent1);
     vector<int> M, J;
@@ -62,10 +62,10 @@ Individuo * Genetico::swapGenetic(Individuo *parent1){
 
 }
 
-void Genetico::evolve(int maxIterWithoutImprov){
+void Genetic::evolve(int maxIterWithoutImprov){
     // Individuals used for crossover
-    Individuo *parent1;
-    Individuo *parent2;
+    Individual *parent1;
+    Individual *parent2;
 
     nbIterWithoutImprov = 1;
     int nbIterWithoutImprovDiv = 1;
@@ -76,7 +76,7 @@ void Genetico::evolve(int maxIterWithoutImprov){
     clock_t debut = clock();
 
     // Child reference
-    Individuo *offspring = new Individuo(parameters);
+    Individual *offspring = new Individual(parameters);
     int i =1;
 
     while (nbIterWithoutImprov < maxIterWithoutImprov) {
@@ -123,13 +123,13 @@ void Genetico::evolve(int maxIterWithoutImprov){
     parameters->nbIter = (unsigned int) nbIter;
 }
 
-Individuo* Genetico::crossoverOX(Individuo *parent1, Individuo *parent2) {
+Individual* Genetic::crossoverOX(Individual *parent1, Individual *parent2) {
     
     // Beginning and end of the crossover zone
     unsigned int begin = rand() % parameters->numJobs * parameters->numJobs;
     unsigned int end = rand() % parameters->numJobs * parameters->numJobs;
 
-    Individuo *child = new Individuo(parameters, 0);
+    Individual *child = new Individual(parameters, 0);
     child->recopyIndividual(parent1);
 
     while (end == begin && parameters->numJobs > 1)
@@ -185,8 +185,8 @@ Individuo* Genetico::crossoverOX(Individuo *parent1, Individuo *parent2) {
     
 }
 
-Individuo* Genetico::RR(Individuo * parent1) {
-    Individuo *offspring = new Individuo(parameters, 0);
+Individual* Genetic::RR(Individual * parent1) {
+    Individual *offspring = new Individual(parameters, 0);
 
     offspring->recopyIndividual(parent1);
 

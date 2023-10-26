@@ -8,9 +8,9 @@
  */
 #include <chrono>
 
-#include "Individuo.h"
-#include "Genetico.h"
-#include "Populacao.h"
+#include "Individual.h"
+#include "Genetic.h"
+#include "Population.h"
 
 using namespace std;
 
@@ -22,9 +22,9 @@ int main(int argc, char* argv[]) {
 
 	const clock_t startTime = clock();
 
-	BuscaLocal *BL = new BuscaLocal(parameters);
+	LocalSearch *BL = new LocalSearch(parameters);
 
-	Populacao *p = new Populacao(parameters, BL);
+	Population *p = new Population(parameters, BL);
 
 	cout << p->getBestIndividual()->makespan << endl;
 
@@ -32,9 +32,9 @@ int main(int argc, char* argv[]) {
 			cout << p->getBestIndividual()->chromosome[i] << " ";
 	} cout << endl;
 
-	Genetico *GE = new Genetico(parameters, p, BL);
+	Genetic *GE = new Genetic(parameters, p, BL);
 
-	// Individuo *i1 = GE->RR(p->getBestIndividual());
+	// Individual *i1 = GE->RR(p->getBestIndividual());
 
 	// cout << i1->verifySequence() << endl;
 

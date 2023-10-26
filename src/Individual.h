@@ -1,5 +1,5 @@
-#ifndef INDIVIDUO_H
-#define INDIVIDUO_H
+#ifndef Individual_H
+#define Individual_H
 
 #include <vector>
 #include <list>
@@ -9,23 +9,23 @@
 
 using namespace std;
 
-class Individuo;
+class Individual;
 
 typedef struct{
 
-    Individuo *individual;
+    Individual *individual;
     double distance;
 
 } Proximity;
 
-class Individuo{
+class Individual{
     private:
        
     public:
         Parameters *parameters;
-        Individuo(Parameters *parameters);
-        Individuo(Parameters *parameters, int c);
-        Individuo();
+        Individual(Parameters *parameters);
+        Individual(Parameters *parameters, int c);
+        Individual();
 
         vector<int> chromosome;
         unsigned int makespan;
@@ -41,12 +41,12 @@ class Individuo{
 
         unsigned int calcMakespan();
 
-        int calculateDistance(Individuo *individuo);
-        void addClose(Individuo *indiv);
-        void removeClose(Individuo *indiv);
+        int calculateDistance(Individual *Individual);
+        void addClose(Individual *indiv);
+        void removeClose(Individual *indiv);
         double distToClosests(int n);
 
-        void recopyIndividual(Individuo *indiv);
+        void recopyIndividual(Individual *indiv);
         bool verifySequence();
 };
 

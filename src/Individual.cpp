@@ -1,6 +1,6 @@
-#include "Individuo.h"
+#include "Individual.h"
 
-Individuo::Individuo(Parameters *parameters){
+Individual::Individual(Parameters *parameters){
     this->parameters = parameters;
     this->makespan = BICH_MIH(parameters, endTimeOperations, chromosome);
     this->age = 0;
@@ -9,7 +9,7 @@ Individuo::Individuo(Parameters *parameters){
     this->divRank = 0;
 }
 
-Individuo::Individuo(Parameters *parameters, int c){
+Individual::Individual(Parameters *parameters, int c){
     this->parameters = parameters;
     this->makespan = 999999;
     this->chromosome = vector<int>(parameters->numJobs * parameters->numTools, 0);
@@ -20,10 +20,10 @@ Individuo::Individuo(Parameters *parameters, int c){
     this->divRank = 0;
 }
 
-Individuo::Individuo(){
+Individual::Individual(){
 }
 
-unsigned int Individuo::calcMakespan(){
+unsigned int Individual::calcMakespan(){
     vector<int> M(parameters->numTools, 0);//Machines acumulated time
     vector<int> J(parameters->numJobs, 0);//Jobs acumulated time
     vector<int> U = chromosome;
@@ -47,7 +47,7 @@ unsigned int Individuo::calcMakespan(){
     return *max_element(M.begin(), M.end()) ;
 }
 
-// unsigned int Individuo::distance(Individuo *indiv) {
+// unsigned int Individual::distance(Individual *indiv) {
 //     // This method computed the edges distance between two solutions
 //     // If an element of solution 1 has a different neighbor (behind
 //     // or ahead) from the same element of solution 2, then the distance
@@ -65,7 +65,7 @@ unsigned int Individuo::calcMakespan(){
 //     return dist;
 // }
 
-void Individuo::recopyIndividual(Individuo *indiv){
+void Individual::recopyIndividual(Individual *indiv){
     this->makespan = indiv->makespan;
     this->chromosome = indiv->chromosome;
     this->fitRank = indiv->fitRank;
@@ -77,7 +77,7 @@ void Individuo::recopyIndividual(Individuo *indiv){
 }
 
 
-void Individuo::addClose(Individuo *indiv) {
+void Individual::addClose(Individual *indiv) {
     // Add an individual in the structure of proximity
     list<Proximity>::iterator it;
     Proximity data;
@@ -94,7 +94,7 @@ void Individuo::addClose(Individuo *indiv) {
     }
 }
 
-void Individuo::removeClose(Individuo *indiv) {
+void Individual::removeClose(Individual *indiv) {
     // Remove an individual in the structure of proximity
     list<Proximity>::iterator last = closest.end();
     for (list<Proximity>::iterator first = closest.begin(); first != last;)
@@ -104,7 +104,7 @@ void Individuo::removeClose(Individuo *indiv) {
             ++first;
 }
 
-double Individuo::distToClosests(int n) {
+double Individual::distToClosests(int n) {
     // Compute the average distance with the n close elements
     double result = 0;
     double compte = 0;
@@ -118,7 +118,7 @@ double Individuo::distToClosests(int n) {
     return result / compte;
 }
 
-int Individuo::calculateDistance(Individuo *individual){
+int Individual::calculateDistance(Individual *individual){
 
     int distance = 0;
     
@@ -137,7 +137,7 @@ int Individuo::calculateDistance(Individuo *individual){
     return distance;
 }
 
-bool Individuo::verifySequence(){
+bool Individual::verifySequence(){
     vector<int> machines;
 
     for(int i = 0; i < chromosome.size(); i++){
