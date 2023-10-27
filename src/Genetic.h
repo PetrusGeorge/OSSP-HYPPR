@@ -1,24 +1,10 @@
-/**
- * @class Genetic
- *
- * @brief Handle genetic algorithm
- *
- * Core of the genetic algorithm. Evolve population through
- * crossover operations until a maximum number of iterations
- * without improvement is reached.
- *
- * @author Jordana Mecler
- *
- * Contact: jmecler@inf.puc-rio.br
- *
- */
+#ifndef Genetic_H
+#define Genetic_H
 
-#ifndef GENETIC_H
-#define GENETIC_H
-
-#include "Population.h"
 #include "Parameters.h"
-#include "Individual.h"
+#include "Construction.h"
+#include "Population.h"
+#include "LocalSearch.h"
 #include "time.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,65 +16,24 @@ using namespace std;
 
 class Genetic
 {
-private:
+    private:
+        Parameters *parameters;
 
-    int nbIterWithoutImprov; ///< number of iterations without improvement
+        LocalSearch *BL;
 
-    int nbIter; ///< number of iterations
+        int nbIterWithoutImprov; ///< number of iterations without improvement
 
-public:
+        int nbIter; ///< number of iterations
 
-    clock_t ticks; ///< maximum time
+    public:
+        Population *population;
 
-    bool traces; ///< if should print traces
+        Individual* crossoverOX(Individual *parent1, Individual *parent2);
+        Genetic(Parameters *parameters, Population *population, LocalSearch *BL);
+        void evolve(int maxIterWithoutImprov);
+        Individual* RR(Individual * parent1);
+        Individual* swapGenetic(Individual * parent1);
 
-    Population *population; ///< population structure
-
-    Individual *offspring; ///< temporary structure for crossover childs
-
-    Individual *trainer; ///< temporary structure for local search
-
-    Parameters *parameters; ///< problem parameters
-
-    /**
-     * Run the genetic algorithm until a number of maximum iterations
-     * without improvement is reached.
-     *
-     * @param maxIterWithoutImprov
-     */
-    void evolve(int maxIterWithoutImprov);
-
-    /**
-     * Order crossover (OX) works by selecting a part of one parent
-     * and copying it to the child, and then go through the second
-     * parent sequentially filling the child unfilled positions with
-     * its values.
-     *
-     * @param parent1 first parent
-     * @param parent2 second parent
-     */
-    void crossoverOX(Individual *parent1, Individual *parent2);
-    void crossoverSJOX(Individual *parent1, Individual *parent2);
-
-    void crossover2(Individual *parent1, Individual *parent2);
-    void crossover3(Individual *parent1);
-    void RR(Individual *parent1);
-
-    void greedy_insertion_adjacent_swap(Individual *parent1);
-    
-
-    /**
-     * Constructor
-     *
-     * @param parameters problem parameters
-     * @param population population structure
-     * @param ticks clock info
-     * @param traces if should print traces
-     */
-    Genetic(Parameters *parameters, Population *population, clock_t ticks, bool traces);
-
-    /// Destructor
-    ~Genetic();
 };
 
-#endif //GENETIC_H
+#endif //Genetic_H

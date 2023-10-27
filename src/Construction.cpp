@@ -159,13 +159,15 @@ unsigned int BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations, ve
     vector<int> currentSequence;
 
     unsigned operationsNum = parameters->numJobs * parameters->numTools;
+    vector<int> machines(parameters->numTools, 0);   
+    int m = 0;     
 
     while(currentSequence.size() < operationsNum){
         vector<pair<double, int>> ops;
-
+        
         for(int i = 0; i < parameters->numJobs; i++){
             for(int j = 0; j < parameters->numTools; j++){
-                if(P[i][j] != 0){
+                if(P[i][j] != 0 && !machines[j]){
                     unsigned op = j * parameters->numJobs + i + 1;
                     double bich_mih = (EMC(parameters, P, op) + calculateMakespanOp(parameters, M, J, op))*(1 - parameters->alpha);
 
@@ -185,6 +187,15 @@ unsigned int BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations, ve
         updateMJ(parameters, M, J, choseOp, endTimeOperations);
 
         pair<unsigned, unsigned> indexJM = decryptJobMachineIndex(choseOp, parameters->numJobs);
+        machines[indexJM.second] = 1;
+        m++;
+
+        //cout << "machine op: " << indexJM.second + 1 << " m: " << m << endl;
+
+        if(m == parameters->numTools){
+            machines = vector<int>(parameters->numTools, 0);
+            m = 0;
+        }
         
         P[indexJM.first][indexJM.second] = 0;
     }

@@ -1,89 +1,35 @@
-/**
- * @class LocalSearch
- *
- * @brief Local search procedures
- *
- * Perform local search procedures such as
- * relocate, swap and 2-opt.
- *
- * @author Jordana Mecler
- *
- * Contact: jmecler@inf.puc-rio.br
- *
- */
+#ifndef LocalSearch_H
+#define LocalSearch_H
 
-#ifndef LOCALSEARCH_H
-#define LOCALSEARCH_H
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <vector>
-#include <list>
-#include <math.h>
-#include "Parameters.h"
+#define EPSILON 0.0000001
 
 using namespace std;
 
-class Individual;
+#include "Parameters.h"
+#include "Construction.h"
+#include "Individual.h"
 
-// Local Search class
-class LocalSearch
-{
-private:
+class LocalSearch{
+    private:
+    public:
+        Parameters *parameters;
 
-    /// Searches the neighborhood represented by index i
-    bool searchNeighborhood(unsigned int i);
+        vector<int> U;
+        vector<int> endTimeOperations;
+        int makespan;
 
-    /// Shuffle indices for random order in local search methods
-    void shuffleMoves();
+        LocalSearch(Parameters *parameters);
+        bool redundancySwapAdjacent(unsigned op1, unsigned op2);
+        bool redundancySwap(const vector<int>& U, int index1, int index2);
+        bool swap();
+        bool relocate();
+        bool relocateBlock(int blockSize);
+        bool relocateBlock2();
+        bool relocateBlock3();
+        bool relocateBlock4();
+        bool searchNeighborhood(unsigned int i);
+        void runSearchTotal(Individual *indiv);
 
-    /// Shuffle indices for random order in local search
-    void shuffleIndices();
-
-    /// Relocate local search
-    bool relocate();
-    void preInsertion(int**, int**, unsigned int, unsigned int);
-
-    /// 2-opt local search
-    bool twoOpt(int);
-
-    unsigned int calcIdleOrBlockedRelocate(int, int, int);
-
-    unsigned int calcIdleOrBlockedSwap(int, int);
-
-    /// Swap local search
-    bool swap();
-
-    int getInsertionLowerBound(const int &, const int &); // Insertion lower bound
-    int getSwapLowerBound(const int &, const int &);  // Swap lower bound
-
-public:
-
-    Parameters *parameters; ///< problem parameters
-
-    Individual *individual; ///< individual to perform local search
-
-    Individual *tempIndiv; ///< temporary structure for local search
-
-    /// Run complete local search
-    void runSearchTotal();
-    void runSearchTotal(double[], int, long[]);
-
-    void constructionSearch();
-
-    /// Constructor
-    LocalSearch();
-
-    /**
-     * Constructor initializes data structures
-     *
-     * @param parameters problem parameters
-     * @param individual individual to perform local search
-     */
-    LocalSearch(Parameters * parameters, Individual *individual);
-
-    /// Destructor
-    ~LocalSearch();
 };
 
-#endif //LOCALSEARCH_H
+#endif
