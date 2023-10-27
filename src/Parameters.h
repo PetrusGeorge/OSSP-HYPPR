@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include <algorithm>
 #include <iostream>
 #include <time.h>
@@ -14,6 +15,10 @@ class Parameters {
 
     private:
         void setMethodParams();
+        void readInstance();
+        void setAlpha();
+
+        string instancePath;
 
     public:
 
@@ -21,10 +26,7 @@ class Parameters {
 
         // Number of iterations on genetic algorithm
         unsigned int nbIter;
-        
-        // Problem Parameters
-        string instancePath;
-        
+                
         // Instance variables
         unsigned int numJobs;
         unsigned int numTools;
@@ -45,9 +47,7 @@ class Parameters {
 
         vector<bool> positionsOffspring; ///< temporary structure for crossover operation
 
-
-
-        Parameters(string instancePath);
+        Parameters(char *argv);
 };
 
 #endif //PARAMETERS_H

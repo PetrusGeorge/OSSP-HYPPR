@@ -20,6 +20,13 @@ int main(int argc, char* argv[]) {
 
 	Parameters *parameters;
 
+	try{
+		parameters = new Parameters(argv[1]);
+	} catch(string error){
+		cout << error << endl;
+		return 0;
+	}
+
 	const clock_t startTime = clock();
 
 	LocalSearch *BL = new LocalSearch(parameters);
@@ -48,7 +55,7 @@ int main(int argc, char* argv[]) {
 
 	cout << p->getBestIndividual()->verifySequence() << endl;
 
-	totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
+	double totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
 
 	cout << totalTime << endl;
 	delete parameters;
