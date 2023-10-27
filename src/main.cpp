@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
 		parameters = new Parameters(argv[1]);
 	} catch(string error){
 		cout << error << endl;
+		delete parameters;
 		return 0;
 	}
 
