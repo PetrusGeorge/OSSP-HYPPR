@@ -60,6 +60,15 @@ void Parameters::readInstance(){
         }
         getline(instanceFile,line); //get empty line
     }
+
+    for(int i =0; i < numJobs; i++){
+        for(int j = 0; j < numTools; j++){
+            for(int k = 0; k < numJobs; k++){
+                cout << jobsToolsMatrixSetup[i][j][k] << " ";
+            } cout << endl;
+        }
+        cout << endl;
+    }
 }
 
 void Parameters::setAlpha() {

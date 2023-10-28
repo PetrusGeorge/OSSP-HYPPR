@@ -11,25 +11,28 @@ pair<unsigned, unsigned> decryptJobMachineIndex(unsigned op, unsigned numJobs){
 int calculateMakespan(Parameters *parameters, vector <int> U, vector<int>& endTimeOperations) {
     vector<int> M(parameters->numTools, 0);//Machines acumulated time
     vector<int> J(parameters->numJobs, 0);//Jobs acumulated time
+    vector<int> machinesBlock(parameters->numTools, -1);
     //U is the sequence of operations
     while(!U.empty()){
-     
         int op = U[0];
         U.erase(U.begin());
-        
+
         pair<unsigned, unsigned> indexJM = decryptJobMachineIndex(op, parameters->numJobs);
+
+        int jobBefore = machinesBlock[indexJM.second] == -1 ? indexJM.first : machinesBlock[indexJM.second];
+        machinesBlock[indexJM.second] = indexJM.first;
 
         int acumulatedJ = (M[indexJM.second] - J[indexJM.first]) > EPSILON ? (M[indexJM.second] - J[indexJM.first]) : 0;
         int acumulatedM = (J[indexJM.first] - M[indexJM.second]) > EPSILON ? J[indexJM.first] - M[indexJM.second] : 0;
 
-        J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
-        M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
+        J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrixSetup[indexJM.second][indexJM.first][jobBefore];
+        M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrixSetup[indexJM.second][indexJM.first][jobBefore];
 
         endTimeOperations[op-1] = M[indexJM.second] > J[indexJM.first] ? M[indexJM.second] : J[indexJM.first];
 
+
         //cout << "J[" << jobNumber-1 << "]: " << J[jobNumber-1] << " M[" << machineNumber-1 << "]: " << M[machineNumber-1] << endl << endl;        
     }
-
     return *max_element(M.begin(), M.end()) ;
 }
 

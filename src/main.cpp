@@ -30,6 +30,11 @@ int main(int argc, char* argv[]) {
 
 	const clock_t startTime = clock();
 
+	vector<int> U = {1, 2, 3};
+	vector<int> end(parameters->numJobs*parameters->numTools, 0);
+
+	cout << calculateMakespan(parameters, U, end) << endl;
+
 	// LocalSearch *BL = new LocalSearch(parameters);
 
 	// Population *p = new Population(parameters, BL);
