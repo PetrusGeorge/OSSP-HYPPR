@@ -18,27 +18,47 @@ void Parameters::readInstance(){
     }
 
     string line;
-    bool firstLine = true;
-    while(getline(instanceFile, line)){
 
+    {
+        getline(instanceFile,line);
         stringstream lineStream(line);
-        std::vector<unsigned int> lineVector;
+        lineStream >> this->numJobs;
+        lineStream >> this->numTools;
+        this->jobsToolsMatrixSetup = vector<vector<vector<unsigned int>>>(numTools, vector<vector<unsigned int>>(numJobs, vector<unsigned int>(numJobs, 0)));
+    }
 
-        if(firstLine){
-            firstLine = false;
-            lineStream >> this->numJobs;
-            lineStream >> this->numTools;
-            continue;
-        }
-
-        unsigned int value;
+    for(int i =0; i < numJobs; i++){
         
-        while(lineStream >> value){
+        getline(instanceFile,line);
+        stringstream lineStream(line);
+        
+        for(int j = 0; j < numTools; j++){
+            
+            unsigned value;
+            lineStream >> value;
 
-            lineVector.push_back(value);
+            for(int k = 0; k < numJobs; k++){
+                jobsToolsMatrixSetup[j][i][k] = value;
+            }
         }
+    }
 
-        this->jobsToolsMatrix.push_back(lineVector);
+    getline(instanceFile,line);//get empty line
+   
+    for(int i =0; i < numTools; i++){
+        for(int j = 0; j < numJobs; j++){
+
+            getline(instanceFile,line);
+            stringstream lineStream(line);
+
+            for(int k = 0; k < numJobs; k++){
+                unsigned value;
+                lineStream >> value;
+
+                jobsToolsMatrixSetup[i][j][k] += value;
+            }
+        }
+        getline(instanceFile,line); //get empty line
     }
 }
 

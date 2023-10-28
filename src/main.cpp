@@ -30,31 +30,31 @@ int main(int argc, char* argv[]) {
 
 	const clock_t startTime = clock();
 
-	LocalSearch *BL = new LocalSearch(parameters);
+	// LocalSearch *BL = new LocalSearch(parameters);
 
-	Population *p = new Population(parameters, BL);
+	// Population *p = new Population(parameters, BL);
 
-	cout << p->getBestIndividual()->makespan << endl;
+	// cout << p->getBestIndividual()->makespan << endl;
 
-	for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
-			cout << p->getBestIndividual()->chromosome[i] << " ";
-	} cout << endl;
+	// for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
+	// 		cout << p->getBestIndividual()->chromosome[i] << " ";
+	// } cout << endl;
 
-	Genetic *GE = new Genetic(parameters, p, BL);
+	// Genetic *GE = new Genetic(parameters, p, BL);
 
 	// Individual *i1 = GE->RR(p->getBestIndividual());
 
 	// cout << i1->verifySequence() << endl;
 
-	GE->evolve(parameters->numJobs * 20);
+	// GE->evolve(parameters->numJobs * 20);
 
-	cout << p->getBestIndividual()->makespan << endl;
+	// cout << p->getBestIndividual()->makespan << endl;
 
-	for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
-			cout << p->getBestIndividual()->chromosome[i] << " ";
-	} cout << endl;
+	// for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
+	// 		cout << p->getBestIndividual()->chromosome[i] << " ";
+	// } cout << endl;
 
-	cout << p->getBestIndividual()->verifySequence() << endl;
+	// cout << p->getBestIndividual()->verifySequence() << endl;
 
 	double totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
 

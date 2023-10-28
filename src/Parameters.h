@@ -32,6 +32,7 @@ class Parameters {
         unsigned int numTools;
         unsigned int maxCapacity;
         vector<vector<unsigned int> > jobsToolsMatrix;
+        vector<vector<vector<unsigned int>>> jobsToolsMatrixSetup;
 
         unsigned int nIterNeighborhood;
 
