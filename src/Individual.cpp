@@ -27,6 +27,7 @@ unsigned int Individual::calcMakespan(){
     vector<int> M(parameters->numTools, 0);//Machines acumulated time
     vector<int> J(parameters->numJobs, 0);//Jobs acumulated time
     vector<int> U = chromosome;
+    vector<int> machinesBlock(parameters->numTools, -1);
     //U is the sequence of operations
     while(!U.empty()){
      
@@ -35,11 +36,14 @@ unsigned int Individual::calcMakespan(){
         
         pair<unsigned, unsigned> indexJM = decryptJobMachineIndex(op, parameters->numJobs);
 
+        int jobBefore = machinesBlock[indexJM.second] == -1 ? indexJM.first : machinesBlock[indexJM.second];
+        machinesBlock[indexJM.second] = indexJM.first;
+
         int acumulatedJ = (M[indexJM.second] - J[indexJM.first]) > EPSILON ? (M[indexJM.second] - J[indexJM.first]) : 0;
         int acumulatedM = (J[indexJM.first] - M[indexJM.second]) > EPSILON ? J[indexJM.first] - M[indexJM.second] : 0;
 
-        J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
-        M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
+        J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrixSetup[indexJM.first][indexJM.second][jobBefore];
+        M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrixSetup[indexJM.first][indexJM.second][jobBefore];
 
         endTimeOperations[op-1] = M[indexJM.second] > J[indexJM.first] ? M[indexJM.second] : J[indexJM.first];
     }

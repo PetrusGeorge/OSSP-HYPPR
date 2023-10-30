@@ -223,7 +223,7 @@ Individual* Genetic::RR(Individual * parent1) {
         int machinesPassed = 0;
 
         vector<int> sequence, times;
-        vector<int> M, J;
+        vector<int> M, J, machinesBlock;
 
         //cout << "operação: " << op << endl;
 
@@ -252,8 +252,8 @@ Individual* Genetic::RR(Individual * parent1) {
                 //     cout << sequence[i] << " ";
                 // } cout << endl;
 
-                calculateJMbyIndex(parameters, times, i-1 > 0 ? i-1 : 0, sequence, M, J);
-                int mk = updateMakespan(parameters, times, i-1 > 0 ? i-1 : 0, sequence, M, J);
+                calculateJMbyIndex(parameters, times, i-1 > 0 ? i-1 : 0, sequence, M, J, machinesBlock);
+                int mk = updateMakespan(parameters, times, i-1 > 0 ? i-1 : 0, sequence, M, J, machinesBlock);
 
                 // calculateMakespan(parameters, sequence, times);
 

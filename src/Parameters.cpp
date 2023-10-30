@@ -25,6 +25,7 @@ void Parameters::readInstance(){
         lineStream >> this->numJobs;
         lineStream >> this->numTools;
         this->jobsToolsMatrixSetup = vector<vector<vector<unsigned int>>>(numTools, vector<vector<unsigned int>>(numJobs, vector<unsigned int>(numJobs, 0)));
+        this->jobsToolsMatrix = vector<vector<unsigned int>>(numJobs, vector<unsigned int>(numTools, 0));
     }
 
     for(int i =0; i < numJobs; i++){
@@ -36,9 +37,10 @@ void Parameters::readInstance(){
             
             unsigned value;
             lineStream >> value;
-
+            jobsToolsMatrix[i][j] = value;
             for(int k = 0; k < numJobs; k++){
                 jobsToolsMatrixSetup[j][i][k] = value;
+                
             }
         }
     }

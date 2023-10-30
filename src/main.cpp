@@ -30,36 +30,46 @@ int main(int argc, char* argv[]) {
 
 	const clock_t startTime = clock();
 
-	vector<int> U = {1, 2, 3};
-	vector<int> end(parameters->numJobs*parameters->numTools, 0);
+	// vector<int> U = {1, 2, 3};
+	// vector<int> end(parameters->numJobs*parameters->numTools, 0);
 
-	cout << calculateMakespan(parameters, U, end) << endl;
+	// cout << calculateMakespan(parameters, U, end) << endl;
 
-	// LocalSearch *BL = new LocalSearch(parameters);
+	// Individual *i = new Individual(parameters);
 
-	// Population *p = new Population(parameters, BL);
+	// cout << i->makespan << endl;
+	// cout << calculateMakespan(parameters, i->chromosome, end) << endl;
 
-	// cout << p->getBestIndividual()->makespan << endl;
+	// vector<int> J, M, machinesBlocks;
 
-	// for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
-	// 		cout << p->getBestIndividual()->chromosome[i] << " ";
-	// } cout << endl;
+	// calculateJMbyIndex(parameters, i->endTimeOperations, 0, i->chromosome, M, J, machinesBlocks);
+	// cout << updateMakespan(parameters, i->endTimeOperations, 0, i->chromosome, M, J, machinesBlocks) << endl;
 
-	// Genetic *GE = new Genetic(parameters, p, BL);
+	LocalSearch *BL = new LocalSearch(parameters);
 
-	// Individual *i1 = GE->RR(p->getBestIndividual());
+	Population *p = new Population(parameters, BL);
 
-	// cout << i1->verifySequence() << endl;
+	cout << p->getBestIndividual()->makespan << endl;
 
-	// GE->evolve(parameters->numJobs * 20);
+	for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
+			cout << p->getBestIndividual()->chromosome[i] << " ";
+	} cout << endl;
 
-	// cout << p->getBestIndividual()->makespan << endl;
+	Genetic *GE = new Genetic(parameters, p, BL);
 
-	// for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
-	// 		cout << p->getBestIndividual()->chromosome[i] << " ";
-	// } cout << endl;
+	Individual *i1 = GE->RR(p->getBestIndividual());
 
-	// cout << p->getBestIndividual()->verifySequence() << endl;
+	cout << i1->verifySequence() << endl;
+
+	GE->evolve(parameters->numJobs * 20);
+
+	cout << p->getBestIndividual()->makespan << endl;
+
+	for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
+			cout << p->getBestIndividual()->chromosome[i] << " ";
+	} cout << endl;
+
+	cout << p->getBestIndividual()->verifySequence() << endl;
 
 	double totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
 

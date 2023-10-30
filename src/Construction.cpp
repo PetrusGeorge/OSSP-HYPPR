@@ -29,8 +29,6 @@ int calculateMakespan(Parameters *parameters, vector <int> U, vector<int>& endTi
         M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrixSetup[indexJM.second][indexJM.first][jobBefore];
 
         endTimeOperations[op-1] = M[indexJM.second] > J[indexJM.first] ? M[indexJM.second] : J[indexJM.first];
-
-
         //cout << "J[" << jobNumber-1 << "]: " << J[jobNumber-1] << " M[" << machineNumber-1 << "]: " << M[machineNumber-1] << endl << endl;        
     }
     return *max_element(M.begin(), M.end()) ;
@@ -60,30 +58,35 @@ int calculateMakespan(Parameters *parameters, vector <int> U, vector<int>& endTi
     return *max_element(M.begin(), M.end()) ;
 } */
 
-inline void updateMJ(Parameters *parameters, vector<int>& M, vector<int>& J, unsigned op, vector<int>& endTimeOperations){
+inline void updateMJ(Parameters *parameters, vector<int>& M, vector<int>& J, unsigned op, vector<int>& endTimeOperations, vector<int>& machinesBlock){
     pair<unsigned, unsigned> indexJM = decryptJobMachineIndex(op, parameters->numJobs);
+
+    int jobBefore = machinesBlock[indexJM.second] == -1 ? indexJM.first : machinesBlock[indexJM.second];
+    machinesBlock[indexJM.second] = indexJM.first;
 
     int acumulatedJ = (M[indexJM.second] - J[indexJM.first]) > EPSILON ? (M[indexJM.second] - J[indexJM.first]) : 0;
     int acumulatedM = (J[indexJM.first] - M[indexJM.second]) > EPSILON ? J[indexJM.first] - M[indexJM.second] : 0;
 
-    J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
-    M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
+    J[indexJM.first] += acumulatedJ + parameters->jobsToolsMatrixSetup[indexJM.second][indexJM.first][jobBefore];
+    M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrixSetup[indexJM.second][indexJM.first][jobBefore];
 
     endTimeOperations[op-1] = M[indexJM.second] > J[indexJM.first] ? M[indexJM.second] : J[indexJM.first];
 }
 
-int updateMakespan(Parameters *parameters, vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J){
+int updateMakespan(Parameters *parameters, vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J, vector<int>& machinesBlock){
     for(int i = index+1; i < U.size(); i++){
         unsigned op = U[i];
-        updateMJ(parameters, M, J, op, endTimeOperations);
+        updateMJ(parameters, M, J, op, endTimeOperations, machinesBlock);
     }
 
     return *max_element(M.begin(), M.end());
 }
 
-void calculateJMbyIndex(Parameters *parameters, const vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J){
+void calculateJMbyIndex(Parameters *parameters, const vector<int>& endTimeOperations, int index, vector<int> U, vector<int>& M, vector<int>& J, vector<int>& machinesBlock){
     M = vector<int>(parameters->numTools, 0);
     J = vector<int>(parameters->numJobs, 0);
+    machinesBlock = vector<int>(parameters->numTools, -1);
+
     int j = 0, m = 0;
     for(int i = index; i >= 0; i--){
         unsigned op = U[i];
@@ -99,17 +102,20 @@ void calculateJMbyIndex(Parameters *parameters, const vector<int>& endTimeOperat
         }
         if(M[indexJM.second] == 0){
             M[indexJM.second] = endTimeOperations[op-1];
+            machinesBlock[indexJM.second] = indexJM.first;
             m++;
         }
     }
 }
 
-inline int calculateMakespanOp(Parameters *parameters, vector<int> M, const vector<int> J, unsigned op){
+inline int calculateMakespanOp(Parameters *parameters, vector<int> M, const vector<int> J, unsigned op, const vector<int>& machinesBlock){
     pair<unsigned, unsigned> indexJM = decryptJobMachineIndex(op, parameters->numJobs);
+
+    int jobBefore = machinesBlock[indexJM.second] == -1 ? indexJM.first : machinesBlock[indexJM.second];
 
     int acumulatedM = (J[indexJM.first] - M[indexJM.second]) > EPSILON ? J[indexJM.first] - M[indexJM.second] : 0;
 
-    M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrix[indexJM.first][indexJM.second];
+    M[indexJM.second] += acumulatedM + parameters->jobsToolsMatrixSetup[indexJM.second][indexJM.first][jobBefore];
 
     return *max_element(M.begin(), M.end()) ;
 }
@@ -160,10 +166,11 @@ unsigned int BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations, ve
     endTimeOperations = vector<int>(parameters->numJobs * parameters->numTools, 0);
     vector<vector<unsigned>> P = parameters->jobsToolsMatrix;
     vector<int> currentSequence;
-
     unsigned operationsNum = parameters->numJobs * parameters->numTools;
     vector<int> machines(parameters->numTools, 0);   
     int m = 0;     
+
+    vector<int> machinesBlock(parameters->numTools, -1);
 
     while(currentSequence.size() < operationsNum){
         vector<pair<double, int>> ops;
@@ -172,7 +179,7 @@ unsigned int BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations, ve
             for(int j = 0; j < parameters->numTools; j++){
                 if(P[i][j] != 0 && !machines[j]){
                     unsigned op = j * parameters->numJobs + i + 1;
-                    double bich_mih = (EMC(parameters, P, op) + calculateMakespanOp(parameters, M, J, op))*(1 - parameters->alpha);
+                    double bich_mih = (EMC(parameters, P, op) + calculateMakespanOp(parameters, M, J, op, machinesBlock))*(1 - parameters->alpha);
 
                     bich_mih += (parameters->alpha * (J[i] - M[j] > EPSILON ? J[i] - M[j] : 0));
 
@@ -187,7 +194,8 @@ unsigned int BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations, ve
         int choseIndex = rand() % ((int) ceil(beta * ops.size()));//random function that has more chance to be a lower number
         int choseOp = ops[choseIndex].second;
         currentSequence.push_back(choseOp);
-        updateMJ(parameters, M, J, choseOp, endTimeOperations);
+
+        updateMJ(parameters, M, J, choseOp, endTimeOperations, machinesBlock);
 
         pair<unsigned, unsigned> indexJM = decryptJobMachineIndex(choseOp, parameters->numJobs);
         machines[indexJM.second] = 1;
@@ -204,5 +212,6 @@ unsigned int BICH_MIH(Parameters *parameters, vector<int>& endTimeOperations, ve
     }
 
     chromose = currentSequence;
+
     return *max_element(M.begin(), M.end());
 }

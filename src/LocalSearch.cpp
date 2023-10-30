@@ -43,7 +43,7 @@ bool LocalSearch::swap(){
     vector<int> bestSequence = U;
     int bestMakespan = makespan;
 
-    vector<int> J, M;
+    vector<int> J, M, machinesBlock;
     vector<int> times;
     vector<int> bestTimes  = endTimeOperations;
 
@@ -65,12 +65,12 @@ bool LocalSearch::swap(){
             int mk;
 
             if(i>j) {
-                calculateJMbyIndex(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J);
-                mk = updateMakespan(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J);
+                calculateJMbyIndex(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J, machinesBlock);
+                mk = updateMakespan(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J, machinesBlock);
             }
             else {
-                calculateJMbyIndex(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J);
-                mk = updateMakespan(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J);
+                calculateJMbyIndex(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J, machinesBlock);
+                mk = updateMakespan(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J, machinesBlock);
             }
 
             if(mk < bestMakespan){
@@ -97,7 +97,7 @@ bool LocalSearch::relocate(){
     vector<int> bestSequence = U;
     int bestMakespan = makespan;
 
-    vector<int> M, J;
+    vector<int> M, J, machinesBlock;
     vector<int> times;
     vector<int> bestTimes = endTimeOperations;
 
@@ -118,13 +118,13 @@ bool LocalSearch::relocate(){
             int mk;
             if(i>j) {
                 sequence.insert(sequence.begin()+j, op);
-                calculateJMbyIndex(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J);
-                mk = updateMakespan(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J);
+                calculateJMbyIndex(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J, machinesBlock);
+                mk = updateMakespan(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J, machinesBlock);
             }
             else {
                 sequence.insert(sequence.begin()+j-1, op);
-                calculateJMbyIndex(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J);
-                mk = updateMakespan(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J);
+                calculateJMbyIndex(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J, machinesBlock);
+                mk = updateMakespan(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J, machinesBlock);
             }
 
             if(mk < bestMakespan){
@@ -152,7 +152,7 @@ bool LocalSearch::relocateBlock(int blockSize){
     vector<int> bestSequence = U;
     int bestMakespan = makespan;
 
-    vector<int> M, J;
+    vector<int> M, J, machinesBlock;
     vector<int> times;
     vector<int> bestTimes = endTimeOperations;
 
@@ -185,12 +185,12 @@ bool LocalSearch::relocateBlock(int blockSize){
 
             int mk;
             if(i>j) {
-                calculateJMbyIndex(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J);
-                mk = updateMakespan(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J);
+                calculateJMbyIndex(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J, machinesBlock);
+                mk = updateMakespan(parameters, times, j-1 >= 0 ? j-1 : 0, sequence, M, J, machinesBlock);
             }
             else {
-                calculateJMbyIndex(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J);
-                mk = updateMakespan(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J);
+                calculateJMbyIndex(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J, machinesBlock);
+                mk = updateMakespan(parameters, times, i-1 >= 0 ? i-1 : 0, sequence, M, J, machinesBlock);
             }
 
             if(mk < bestMakespan){
