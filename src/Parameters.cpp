@@ -39,8 +39,7 @@ void Parameters::readInstance(){
             lineStream >> value;
             jobsToolsMatrix[i][j] = value;
             for(int k = 0; k < numJobs; k++){
-                jobsToolsMatrixSetup[j][i][k] = value;
-                
+                jobsToolsMatrixSetup[i][j][k] = value;
             }
         }
     }

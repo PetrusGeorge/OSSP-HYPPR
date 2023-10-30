@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 	const clock_t startTime = clock();
 
 	// vector<int> U = {1, 2, 3};
-	// vector<int> end(parameters->numJobs*parameters->numTools, 0);
+	vector<int> end(parameters->numJobs*parameters->numTools, 0);
 
 	// cout << calculateMakespan(parameters, U, end) << endl;
 
@@ -61,15 +61,17 @@ int main(int argc, char* argv[]) {
 
 	cout << i1->verifySequence() << endl;
 
-	GE->evolve(parameters->numJobs * 20);
+	GE->evolve(parameters->numJobs * 200);
 
 	cout << p->getBestIndividual()->makespan << endl;
+	cout << calculateMakespan(parameters, p->getBestIndividual()->chromosome, end) << endl;
 
 	for(int i =0; i < p->getBestIndividual()->chromosome.size(); i++){
 			cout << p->getBestIndividual()->chromosome[i] << " ";
 	} cout << endl;
 
 	cout << p->getBestIndividual()->verifySequence() << endl;
+
 
 	double totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
 
